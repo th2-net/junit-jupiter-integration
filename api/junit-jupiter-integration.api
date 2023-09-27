@@ -1,0 +1,227 @@
+public abstract interface annotation class com/exactpro/th2/test/annotations/CustomConfigProvider : java/lang/annotation/Annotation {
+	public abstract fun name ()Ljava/lang/String;
+}
+
+public abstract interface annotation class com/exactpro/th2/test/annotations/Th2AppFactory : java/lang/annotation/Annotation {
+}
+
+public abstract interface annotation class com/exactpro/th2/test/annotations/Th2IntegrationTest : java/lang/annotation/Annotation {
+}
+
+public abstract interface annotation class com/exactpro/th2/test/annotations/Th2TestFactory : java/lang/annotation/Annotation {
+}
+
+public final class com/exactpro/th2/test/extension/CleanupExtension : org/junit/jupiter/api/extension/AfterEachCallback, org/junit/jupiter/api/extension/BeforeAllCallback, org/junit/jupiter/api/extension/BeforeEachCallback, org/junit/jupiter/api/extension/ParameterResolver {
+	public fun <init> ()V
+	public fun afterEach (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun beforeAll (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun beforeEach (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun resolveParameter (Lorg/junit/jupiter/api/extension/ParameterContext;Lorg/junit/jupiter/api/extension/ExtensionContext;)Ljava/lang/Object;
+	public fun supportsParameter (Lorg/junit/jupiter/api/extension/ParameterContext;Lorg/junit/jupiter/api/extension/ExtensionContext;)Z
+}
+
+public final class com/exactpro/th2/test/extension/CleanupExtension$Registry {
+	public fun <init> ()V
+	public final fun add (Ljava/lang/AutoCloseable;)V
+	public final fun add (Ljava/lang/String;Ljava/lang/AutoCloseable;)V
+}
+
+public final class com/exactpro/th2/test/extension/Th2CommonFactoryExtension : org/junit/jupiter/api/extension/AfterEachCallback, org/junit/jupiter/api/extension/BeforeAllCallback, org/junit/jupiter/api/extension/BeforeEachCallback, org/junit/jupiter/api/extension/ParameterResolver {
+	public fun <init> ()V
+	public fun afterEach (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun beforeAll (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun beforeEach (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun resolveParameter (Lorg/junit/jupiter/api/extension/ParameterContext;Lorg/junit/jupiter/api/extension/ExtensionContext;)Lcom/exactpro/th2/common/schema/factory/CommonFactory;
+	public synthetic fun resolveParameter (Lorg/junit/jupiter/api/extension/ParameterContext;Lorg/junit/jupiter/api/extension/ExtensionContext;)Ljava/lang/Object;
+	public fun supportsParameter (Lorg/junit/jupiter/api/extension/ParameterContext;Lorg/junit/jupiter/api/extension/ExtensionContext;)Z
+}
+
+public final class com/exactpro/th2/test/extension/Th2ConfigExtension : org/junit/jupiter/api/extension/AfterAllCallback, org/junit/jupiter/api/extension/BeforeAllCallback {
+	public fun <init> ()V
+	public fun afterAll (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun beforeAll (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+}
+
+public final class com/exactpro/th2/test/extension/Th2CradleExtension : org/junit/jupiter/api/extension/AfterAllCallback, org/junit/jupiter/api/extension/BeforeAllCallback, org/junit/jupiter/api/extension/BeforeEachCallback, org/junit/jupiter/api/extension/ParameterResolver, org/junit/jupiter/api/extension/TestInstancePostProcessor {
+	public fun <init> ()V
+	public fun afterAll (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun beforeAll (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun beforeEach (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun postProcessTestInstance (Ljava/lang/Object;Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun resolveParameter (Lorg/junit/jupiter/api/extension/ParameterContext;Lorg/junit/jupiter/api/extension/ExtensionContext;)Ljava/lang/Object;
+	public fun supportsParameter (Lorg/junit/jupiter/api/extension/ParameterContext;Lorg/junit/jupiter/api/extension/ExtensionContext;)Z
+}
+
+public final class com/exactpro/th2/test/extension/Th2CustomConfigExtension : org/junit/jupiter/api/extension/BeforeEachCallback, org/junit/jupiter/api/extension/TestInstancePostProcessor {
+	public fun <init> ()V
+	public fun beforeEach (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun postProcessTestInstance (Ljava/lang/Object;Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+}
+
+public final class com/exactpro/th2/test/extension/Th2RabbitMqExtension : org/junit/jupiter/api/extension/AfterAllCallback, org/junit/jupiter/api/extension/BeforeAllCallback, org/junit/jupiter/api/extension/BeforeEachCallback, org/junit/jupiter/api/extension/TestInstancePostProcessor {
+	public fun <init> ()V
+	public fun afterAll (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun beforeAll (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun beforeEach (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun postProcessTestInstance (Ljava/lang/Object;Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+}
+
+public final class com/exactpro/th2/test/integration/CradleIntegration : org/testcontainers/lifecycle/Startable {
+	public static final field Companion Lcom/exactpro/th2/test/integration/CradleIntegration$Companion;
+	public static final field DEFAULT_IMAGE Lorg/testcontainers/utility/DockerImageName;
+	public synthetic fun <init> (Lorg/testcontainers/utility/DockerImageName;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun configureContainer (Ljava/util/function/Consumer;)Lcom/exactpro/th2/test/integration/CradleIntegration;
+	public static final fun defaultImage ()Lcom/exactpro/th2/test/integration/CradleIntegration;
+	public static final fun fromImage (Lorg/testcontainers/utility/DockerImageName;)Lcom/exactpro/th2/test/integration/CradleIntegration;
+	public fun start ()V
+	public fun stop ()V
+}
+
+public final class com/exactpro/th2/test/integration/CradleIntegration$Companion {
+	public final fun defaultImage ()Lcom/exactpro/th2/test/integration/CradleIntegration;
+	public final fun fromImage (Lorg/testcontainers/utility/DockerImageName;)Lcom/exactpro/th2/test/integration/CradleIntegration;
+}
+
+public final class com/exactpro/th2/test/integration/CradleIntegrationKt {
+	public static final fun container (Lcom/exactpro/th2/test/integration/CradleIntegration;Lkotlin/jvm/functions/Function1;)Lcom/exactpro/th2/test/integration/CradleIntegration;
+}
+
+public final class com/exactpro/th2/test/integration/RabbitMqIntegration : org/testcontainers/lifecycle/Startable {
+	public static final field Companion Lcom/exactpro/th2/test/integration/RabbitMqIntegration$Companion;
+	public static final field DEFAULT_EXCHANGE Ljava/lang/String;
+	public static final field DEFAULT_IMAGE Lorg/testcontainers/utility/DockerImageName;
+	public synthetic fun <init> (Lorg/testcontainers/utility/DockerImageName;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun configureContainer (Ljava/util/function/Consumer;)Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+	public static final fun defaultImage ()Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+	public static final fun fromImage (Ljava/lang/String;)Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+	public final fun purgeQueue (Ljava/lang/String;)Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+	public fun start ()V
+	public fun stop ()V
+	public final fun withBinding (Ljava/lang/String;Ljava/lang/String;)Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+	public final fun withDefaultExchange ()Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+	public final fun withDurableExchange ()Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+	public final fun withQueue (Ljava/lang/String;)Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+	public final fun withQueue (Ljava/lang/String;Z)Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+	public static synthetic fun withQueue$default (Lcom/exactpro/th2/test/integration/RabbitMqIntegration;Ljava/lang/String;ZILjava/lang/Object;)Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+}
+
+public final class com/exactpro/th2/test/integration/RabbitMqIntegration$Companion {
+	public final fun defaultImage ()Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+	public final fun fromImage (Ljava/lang/String;)Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+}
+
+public final class com/exactpro/th2/test/integration/RabbitMqIntegrationKt {
+	public static final fun container (Lcom/exactpro/th2/test/integration/RabbitMqIntegration;Lkotlin/jvm/functions/Function1;)Lcom/exactpro/th2/test/integration/RabbitMqIntegration;
+}
+
+public final class com/exactpro/th2/test/queue/CollectorMessageListener : com/exactpro/th2/common/schema/message/MessageListener, java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
+	public static final field Companion Lcom/exactpro/th2/test/queue/CollectorMessageListener$Companion;
+	public synthetic fun <init> (Ljava/util/concurrent/BlockingQueue;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun createUnbound ()Lcom/exactpro/th2/test/queue/CollectorMessageListener;
+	public static final fun createWithCapacity (I)Lcom/exactpro/th2/test/queue/CollectorMessageListener;
+	public fun handle (Lcom/exactpro/th2/common/schema/message/DeliveryMetadata;Ljava/lang/Object;)V
+	public final fun isEmpty ()Z
+	public fun iterator ()Ljava/util/Iterator;
+	public final fun poll (Ljava/time/Duration;)Ljava/lang/Object;
+}
+
+public final class com/exactpro/th2/test/queue/CollectorMessageListener$Companion {
+	public final fun createUnbound ()Lcom/exactpro/th2/test/queue/CollectorMessageListener;
+	public final fun createWithCapacity (I)Lcom/exactpro/th2/test/queue/CollectorMessageListener;
+}
+
+public final class com/exactpro/th2/test/queue/CollectorMessageListenerKt {
+	public static final fun isNotEmpty (Lcom/exactpro/th2/test/queue/CollectorMessageListener;)Z
+}
+
+public final class com/exactpro/th2/test/spec/CradleSpec {
+	public static final field Companion Lcom/exactpro/th2/test/spec/CradleSpec$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun create ()Lcom/exactpro/th2/test/spec/CradleSpec;
+	public static final fun create (Ljava/lang/String;)Lcom/exactpro/th2/test/spec/CradleSpec;
+	public final fun disableAutoPages ()Lcom/exactpro/th2/test/spec/CradleSpec;
+	public final fun reuseKeyspace ()Lcom/exactpro/th2/test/spec/CradleSpec;
+	public final fun withAutoPageInterval (Ljava/time/Duration;)Lcom/exactpro/th2/test/spec/CradleSpec;
+	public final fun withPageDuration (Ljava/time/Duration;)Lcom/exactpro/th2/test/spec/CradleSpec;
+	public final fun withPageSize (I)Lcom/exactpro/th2/test/spec/CradleSpec;
+	public final fun withQueryTimeout (J)Lcom/exactpro/th2/test/spec/CradleSpec;
+	public final fun withRefreshBookInterval (J)Lcom/exactpro/th2/test/spec/CradleSpec;
+}
+
+public final class com/exactpro/th2/test/spec/CradleSpec$Companion {
+	public final fun create ()Lcom/exactpro/th2/test/spec/CradleSpec;
+	public final fun create (Ljava/lang/String;)Lcom/exactpro/th2/test/spec/CradleSpec;
+	public static synthetic fun create$default (Lcom/exactpro/th2/test/spec/CradleSpec$Companion;Ljava/lang/String;ILjava/lang/Object;)Lcom/exactpro/th2/test/spec/CradleSpec;
+}
+
+public final class com/exactpro/th2/test/spec/CustomConfigSpec {
+	public static final field Companion Lcom/exactpro/th2/test/spec/CustomConfigSpec$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun fromObject (Ljava/lang/Object;)Lcom/exactpro/th2/test/spec/CustomConfigSpec;
+	public static final fun fromString (Ljava/lang/String;)Lcom/exactpro/th2/test/spec/CustomConfigSpec;
+}
+
+public final class com/exactpro/th2/test/spec/CustomConfigSpec$Companion {
+	public final fun fromObject (Ljava/lang/Object;)Lcom/exactpro/th2/test/spec/CustomConfigSpec;
+	public final fun fromString (Ljava/lang/String;)Lcom/exactpro/th2/test/spec/CustomConfigSpec;
+}
+
+public final class com/exactpro/th2/test/spec/FilterContainerSpec {
+	public final fun configureMessageFilter (Ljava/util/function/Consumer;)V
+	public final fun configureMetadataFilter (Ljava/util/function/Consumer;)V
+}
+
+public final class com/exactpro/th2/test/spec/FilterSpec {
+	public final fun book ()Lcom/exactpro/th2/test/spec/FilterSpec$Expectation;
+	public final fun direction ()Lcom/exactpro/th2/test/spec/FilterSpec$Expectation;
+	public final fun field (Ljava/lang/String;)Lcom/exactpro/th2/test/spec/FilterSpec$Expectation;
+	public final fun messageType ()Lcom/exactpro/th2/test/spec/FilterSpec$Expectation;
+	public final fun protocol ()Lcom/exactpro/th2/test/spec/FilterSpec$Expectation;
+	public final fun sessionAlias ()Lcom/exactpro/th2/test/spec/FilterSpec$Expectation;
+	public final fun sessionGroup ()Lcom/exactpro/th2/test/spec/FilterSpec$Expectation;
+}
+
+public final class com/exactpro/th2/test/spec/FilterSpec$Expectation {
+	public final fun shouldBeEmpty ()Lcom/exactpro/th2/test/spec/FilterSpec;
+	public final fun shouldBeEqualTo (Ljava/lang/String;)Lcom/exactpro/th2/test/spec/FilterSpec;
+	public final fun shouldMatchWildcard (Ljava/lang/String;)Lcom/exactpro/th2/test/spec/FilterSpec;
+	public final fun shouldNotBeEmpty ()Lcom/exactpro/th2/test/spec/FilterSpec;
+	public final fun shouldNotBeEqualTo (Ljava/lang/String;)Lcom/exactpro/th2/test/spec/FilterSpec;
+}
+
+public final class com/exactpro/th2/test/spec/PinCollectionSpec {
+	public fun <init> ()V
+	public final fun configurePin (Ljava/lang/String;Ljava/util/function/Consumer;)Lcom/exactpro/th2/test/spec/PinCollectionSpec;
+}
+
+public final class com/exactpro/th2/test/spec/PinSpec {
+	public final fun addFilter (Ljava/util/function/Consumer;)Lcom/exactpro/th2/test/spec/PinSpec;
+	public final fun attributes ([Ljava/lang/String;)Lcom/exactpro/th2/test/spec/PinSpec;
+}
+
+public final class com/exactpro/th2/test/spec/PinsSpec {
+	public final fun configurePublishers (Ljava/util/function/Consumer;)V
+	public final fun configureSubscribers (Ljava/util/function/Consumer;)V
+}
+
+public final class com/exactpro/th2/test/spec/RabbitMqSpec {
+	public static final field Companion Lcom/exactpro/th2/test/spec/RabbitMqSpec$Companion;
+	public static final field EVENTS_PIN_NAME Ljava/lang/String;
+	public final fun configurePins (Ljava/util/function/Consumer;)Lcom/exactpro/th2/test/spec/RabbitMqSpec;
+	public static final fun create ()Lcom/exactpro/th2/test/spec/RabbitMqSpec;
+}
+
+public final class com/exactpro/th2/test/spec/RabbitMqSpec$Companion {
+	public final fun create ()Lcom/exactpro/th2/test/spec/RabbitMqSpec;
+}
+
+public final class com/exactpro/th2/test/spec/RabbitMqSpecKt {
+	public static final fun filter (Lcom/exactpro/th2/test/spec/PinSpec;Lkotlin/jvm/functions/Function1;)Lcom/exactpro/th2/test/spec/PinSpec;
+	public static final fun message (Lcom/exactpro/th2/test/spec/FilterContainerSpec;Lkotlin/jvm/functions/Function1;)V
+	public static final fun metadata (Lcom/exactpro/th2/test/spec/FilterContainerSpec;Lkotlin/jvm/functions/Function1;)V
+	public static final fun pin (Lcom/exactpro/th2/test/spec/PinCollectionSpec;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lcom/exactpro/th2/test/spec/PinCollectionSpec;
+	public static final fun pins (Lcom/exactpro/th2/test/spec/RabbitMqSpec;Lkotlin/jvm/functions/Function1;)Lcom/exactpro/th2/test/spec/RabbitMqSpec;
+	public static final fun publishers (Lcom/exactpro/th2/test/spec/PinsSpec;Lkotlin/jvm/functions/Function1;)V
+	public static final fun subscribers (Lcom/exactpro/th2/test/spec/PinsSpec;Lkotlin/jvm/functions/Function1;)V
+}
+

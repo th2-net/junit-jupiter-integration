@@ -1,0 +1,16 @@
+name: Build and release Java distributions to sonatype.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: th2-net/.github/.github/workflows/compound-java.yml@main
+    with:
+      build-target: 'Sonatype'
+      gradleVersion: "8"
+    secrets:
+      sonatypeUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
+      sonatypePassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
+      sonatypeSigningKey: ${{ secrets.SONATYPE_GPG_ARMORED_KEY }}
+      sonatypeSigningPassword: ${{ secrets.SONATYPE_SIGNING_PASSWORD }}
