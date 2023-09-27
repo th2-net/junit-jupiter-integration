@@ -107,7 +107,7 @@ public class RabbitMqIntegration private constructor(
 
         @JvmField
         public val DEFAULT_IMAGE: DockerImageName =
-            DockerImageName.parse("rabbitmq:3.10-management")
+            DockerImageName.parse("rabbitmq:3.12.6-management")
     }
 }
 
