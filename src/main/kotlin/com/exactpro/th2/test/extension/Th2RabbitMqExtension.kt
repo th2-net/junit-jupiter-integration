@@ -58,6 +58,7 @@ public class Th2RabbitMqExtension : TestInstancePostProcessor, BeforeAllCallback
 
     override fun beforeEach(context: ExtensionContext?) {
         if (::rabbitmq.isInitialized) {
+            LOGGER.info { "Cleaning queues" }
             RabbitMqConfigurator.purgeAllQueues(rabbitmq, spec)
         }
     }

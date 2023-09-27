@@ -80,6 +80,8 @@ public class RabbitMqIntegration private constructor(
             "name=$queueName",
         )
         check(result.exitCode == 0) { "cannot purge queue $queueName: ${result.stderr}" }
+        logger.debug { "Purge output: ${result.stdout}" }
+        logger.debug { "Purge error: ${result.stderr}" }
     }
 
     private fun withExchange(durable: Boolean) {
