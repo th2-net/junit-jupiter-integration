@@ -37,7 +37,7 @@ dependencies {
     api("com.exactpro.th2:common:5.4.2-dev")
     implementation("com.exactpro.th2:cradle-cassandra:5.1.4-dev")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.19.0"))
+    api(platform("org.testcontainers:testcontainers-bom:1.19.0"))
     api("org.testcontainers:rabbitmq") {
         because("integration with rabbitmq")
     }
