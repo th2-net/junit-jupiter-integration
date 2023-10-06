@@ -45,13 +45,11 @@ public class Th2RabbitMqExtension : TestInstancePostProcessor, BeforeAllCallback
     override fun beforeAll(context: ExtensionContext) {
         startMq(context.requiredTestInstance)
         val mqConnection = RabbitMqConfigProvider.getConnectionConfig(rabbitmq)
-        val appFolder: Path = context.getStore(Th2.NAMESPACE).getRequired(Th2ConfigExtension.APP_CONFIG)
-        with(appFolder) {
+        with(Th2.getAppConfigFolder(context)) {
             writeConfig(mqConnection, RabbitMqConfigProvider.getComponentConfig(spec))
         }
 
-        val testFolder: Path = context.getStore(Th2.NAMESPACE).getRequired(Th2ConfigExtension.TEST_CONFIG)
-        with(testFolder) {
+        with(Th2.getTestConfigFolder(context)) {
             writeConfig(mqConnection, RabbitMqConfigProvider.getTestConfig(spec))
         }
     }

@@ -25,7 +25,6 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.TestInstancePostProcessor
 import org.junit.platform.commons.support.AnnotationSupport
 import org.junit.platform.commons.support.ReflectionSupport
-import java.nio.file.Path
 import kotlin.io.path.outputStream
 
 public class Th2CustomConfigExtension : TestInstancePostProcessor, BeforeEachCallback {
@@ -56,7 +55,7 @@ public class Th2CustomConfigExtension : TestInstancePostProcessor, BeforeEachCal
         context: ExtensionContext,
         customSpec: CustomConfigSpec,
     ) {
-        val appFolder = context.getStore(Th2.NAMESPACE).getRequired<Path>(Th2ConfigExtension.APP_CONFIG)
+        val appFolder = Th2.getAppConfigFolder(context)
         val customConfigFile = appFolder.resolve(ConfigurationWriter.CUSTOM_CONFIG)
         LOGGER.debug { "Writing custom config to file $customConfigFile" }
         customConfigFile.outputStream().use {

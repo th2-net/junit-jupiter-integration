@@ -39,7 +39,6 @@ import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolver
 import org.junit.jupiter.api.extension.TestInstancePostProcessor
-import java.nio.file.Path
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.io.path.outputStream
@@ -64,8 +63,7 @@ public class Th2CradleExtension :
         cradleSpec?.also { spec ->
             startCradle(spec, context.requiredTestInstance)
             val cradleConnection = CradleConfigProvider.getCradleConnectionConfig(cradle, spec)
-            val appFolder: Path = context.getStore(Th2.NAMESPACE).getRequired(Th2ConfigExtension.APP_CONFIG)
-            with(appFolder) {
+            with(Th2.getAppConfigFolder(context)) {
                 resolve(ConfigurationWriter.CRADLE_CONNECTION_CONFIG).outputStream().use {
                     ConfigurationWriter.write(cradleConnection, it)
                 }
@@ -77,8 +75,7 @@ public class Th2CradleExtension :
                 }
             }
 
-            val testFolder: Path = context.getStore(Th2.NAMESPACE).getRequired(Th2ConfigExtension.TEST_CONFIG)
-            with(testFolder) {
+            with(Th2.getTestConfigFolder(context)) {
                 resolve(ConfigurationWriter.CRADLE_CONNECTION_CONFIG).outputStream().use {
                     ConfigurationWriter.write(cradleConnection, it)
                 }

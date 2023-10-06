@@ -28,6 +28,7 @@ internal object ConfigurationWriter {
     const val CRADLE_PARAMETERS_CONFIG: String = "cradle_manager.json"
     const val CUSTOM_CONFIG: String = "custom.json"
     const val BOX_CONFIG: String = "box.json"
+    const val GRPC_CONFIG: String = "grpc.json"
 
     fun write(cfg: Any, output: OutputStream) {
         MAPPER.writeValue(output, cfg)

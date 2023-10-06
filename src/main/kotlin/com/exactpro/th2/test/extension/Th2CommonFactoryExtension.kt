@@ -46,21 +46,19 @@ public class Th2CommonFactoryExtension : BeforeAllCallback, BeforeEachCallback, 
     private lateinit var testCommonFactory: FactoryHolder
 
     override fun beforeAll(context: ExtensionContext) {
-        val appFolder: Path = context.getStore(Th2.NAMESPACE).getRequired(Th2ConfigExtension.APP_CONFIG)
-        with(appFolder) {
+        with(Th2.getAppConfigFolder(context)) {
             writeConfiguration("app")
         }
-        val testFolder: Path = context.getStore(Th2.NAMESPACE).getRequired(Th2ConfigExtension.TEST_CONFIG)
-        with(testFolder) {
+        with(Th2.getTestConfigFolder(context)) {
             writeConfiguration("test")
         }
     }
 
     override fun beforeEach(context: ExtensionContext) {
-        val appFolder: Path = context.getStore(Th2.NAMESPACE).getRequired(Th2ConfigExtension.APP_CONFIG)
+        val appFolder: Path = Th2.getAppConfigFolder(context)
         appCommonFactory = FactoryHolder(appFolder)
 
-        val testFolder: Path = context.getStore(Th2.NAMESPACE).getRequired(Th2ConfigExtension.TEST_CONFIG)
+        val testFolder: Path = Th2.getTestConfigFolder(context)
         testCommonFactory = FactoryHolder(testFolder)
     }
 

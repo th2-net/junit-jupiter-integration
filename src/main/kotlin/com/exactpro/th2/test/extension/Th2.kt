@@ -16,9 +16,17 @@
 
 package com.exactpro.th2.test.extension
 
+import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace
+import java.nio.file.Path
 
 internal object Th2 {
     @JvmField
     val NAMESPACE: Namespace = Namespace.create(Th2::class)
+
+    fun getAppConfigFolder(context: ExtensionContext): Path =
+        context.getStore(NAMESPACE).getRequired(Th2ConfigExtension.APP_CONFIG)
+
+    fun getTestConfigFolder(context: ExtensionContext): Path =
+        context.getStore(NAMESPACE).getRequired(Th2ConfigExtension.TEST_CONFIG)
 }

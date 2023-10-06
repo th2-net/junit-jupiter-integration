@@ -58,6 +58,10 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    testImplementation("com.exactpro.th2:grpc-check1:4.2.0-dev") {
+        because("test gRPC integration")
+    }
 }
 
 tasks.test {

@@ -21,6 +21,7 @@ import com.exactpro.th2.test.extension.Th2CommonFactoryExtension
 import com.exactpro.th2.test.extension.Th2ConfigExtension
 import com.exactpro.th2.test.extension.Th2CradleExtension
 import com.exactpro.th2.test.extension.Th2CustomConfigExtension
+import com.exactpro.th2.test.extension.Th2GrpcExtension
 import com.exactpro.th2.test.extension.Th2RabbitMqExtension
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
@@ -38,6 +39,8 @@ import org.junit.jupiter.api.extension.ExtendWith
  * is used to configure Cradle service
  * + [CustomConfigSpec][com.exactpro.th2.test.spec.CustomConfigSpec]
  * is used to configure custom configuration for component
+ * + [GrpcSpec][com.exactpro.th2.test.spec.GrpcSpec]
+ * is used to configure gRPC services
  *
  * In order to inject pre-configured [CommonFactory][com.exactpro.th2.common.schema.factory.CommonFactory]
  * you need to add parameter with corresponding type to a test method.
@@ -73,6 +76,7 @@ import org.junit.jupiter.api.extension.ExtendWith
     Th2ConfigExtension::class,
     Th2RabbitMqExtension::class,
     Th2CradleExtension::class,
+    Th2GrpcExtension::class,
     Th2CustomConfigExtension::class,
     Th2CommonFactoryExtension::class,
     CleanupExtension::class,

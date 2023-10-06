@@ -4,6 +4,7 @@ The library contains extensions for JUnit 5 to simplify the components integrati
 It provides you with:
 + MQ (RabbitMQ) integration
 + Cradle (Cassandra) integration
++ gRPC configuration
 + Automated resources clean up after test
 
 For integration with MQ and Cradle the library is using [Testcontainers](https://testcontainers.com/).
@@ -151,6 +152,62 @@ class YourTest {
     }
 }
 ```
+
+### gRPC configuration
+
+The component under the test might require to start a gRPC or connect to an endpoint via gRPC.
+For that you can use `GrpcSpec` to configure which services the component uses or which endpoints it exposes.
+
+Here you can see an example how you can define spec if app needs to connect to Check1Service service
+
+```kotlin
+@Th2IntegrationTest
+class YourTest {
+    @JvmField
+    internal val grpc = GrpcSpec.create()
+        .client<Check1Service>() // the app under test expects to connect to Check1Service service
+    
+    @Test
+    fun test(
+        @Th2AppFactory factory: CommonFactory,
+        @Th2TestFactory testFactory: CommonFactory,
+    ) {
+        // create an impl of required service and register it in test factory
+        testFactory.grpcRouter.startServer(
+            createTestCheck1Service(),
+        ).start()
+
+        val check1Service = factory.grpcRouter.getService(Check1Service::class.java)
+        // do calls
+    }
+}
+```
+
+And here is an example when the app exposes Check1Service service, and we want to interact with it
+
+```kotlin
+@Th2IntegrationTest
+class YourTest {
+    @JvmField
+    internal val grpc = GrpcSpec.create()
+        .server<Check1Service>() // the app under test expose Check1Service service
+    
+    @Test
+    fun test(
+        @Th2AppFactory factory: CommonFactory,
+        @Th2TestFactory testFactory: CommonFactory,
+    ) {
+        // create an impl of required service and register it in app factory
+        factory.grpcRouter.startServer(
+            createTestCheck1Service(),
+        ).start()
+
+        val check1Service = testFactory.grpcRouter.getService(Check1Service::class.java)
+        // do calls
+    }
+}
+```
+
 
 ### Custom configuration
 
