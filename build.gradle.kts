@@ -34,7 +34,7 @@ java {
 }
 
 dependencies {
-    api("com.exactpro.th2:common:5.4.2-dev")
+    api("com.exactpro.th2:common:5.7.1-dev")
     implementation("com.exactpro.th2:cradle-cassandra:5.1.4-dev")
 
     api(platform("org.testcontainers:testcontainers-bom:1.19.0"))
