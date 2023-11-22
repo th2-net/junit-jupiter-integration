@@ -29,6 +29,7 @@ internal object ConfigurationWriter {
     const val CUSTOM_CONFIG: String = "custom.json"
     const val BOX_CONFIG: String = "box.json"
     const val GRPC_CONFIG: String = "grpc.json"
+    const val GRPC_ROUTER_CONFIG: String = "grpc_router.json"
 
     fun write(cfg: Any, output: OutputStream) {
         MAPPER.writeValue(output, cfg)

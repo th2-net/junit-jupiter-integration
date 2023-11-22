@@ -19,6 +19,7 @@ package com.exactpro.th2.test.extension
 import com.exactpro.th2.common.schema.grpc.configuration.GrpcConfiguration
 import com.exactpro.th2.common.schema.grpc.configuration.GrpcEndpointConfiguration
 import com.exactpro.th2.common.schema.grpc.configuration.GrpcRawRobinStrategy
+import com.exactpro.th2.common.schema.grpc.configuration.GrpcRouterConfiguration
 import com.exactpro.th2.common.schema.grpc.configuration.GrpcServerConfiguration
 import com.exactpro.th2.common.schema.grpc.configuration.GrpcServiceConfiguration
 import com.exactpro.th2.common.schema.strategy.route.impl.RobinRoutingStrategy
@@ -44,12 +45,16 @@ public class Th2GrpcExtension : TestInstancePostProcessor, BeforeAllCallback {
         val grpcSpec = spec ?: return
         val appPort: Int = findFreePort()
         val testPort: Int = findFreePort(start = appPort + 1)
+        val routerConfig: GrpcRouterConfiguration = grpcSpec.routerSpec.routerConfig
         with(Th2.getAppConfigFolder(context)) {
             resolve(ConfigurationWriter.GRPC_CONFIG).outputStream().use { out ->
                 ConfigurationWriter.write(
                     createAppGrpcConfig(appPort, grpcSpec, testPort),
                     out,
                 )
+            }
+            resolve(ConfigurationWriter.GRPC_ROUTER_CONFIG).outputStream().use {
+                ConfigurationWriter.write(routerConfig, it)
             }
         }
         with(Th2.getTestConfigFolder(context)) {
@@ -58,6 +63,9 @@ public class Th2GrpcExtension : TestInstancePostProcessor, BeforeAllCallback {
                     createTestGrpcConfig(appPort, grpcSpec, testPort),
                     out,
                 )
+            }
+            resolve(ConfigurationWriter.GRPC_ROUTER_CONFIG).outputStream().use {
+                ConfigurationWriter.write(routerConfig, it)
             }
         }
     }

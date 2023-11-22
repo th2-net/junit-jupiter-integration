@@ -36,6 +36,9 @@ java {
 dependencies {
     api("com.exactpro.th2:common:5.7.1-dev")
     implementation("com.exactpro.th2:cradle-cassandra:5.1.4-dev")
+    implementation("com.exactpro.th2:grpc-service-generator:3.4.0") {
+        because("cannot work with retry configuraiton for gRPC without that")
+    }
 
     api(platform("org.testcontainers:testcontainers-bom:1.19.0"))
     api("org.testcontainers:rabbitmq") {

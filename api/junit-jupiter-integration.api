@@ -197,6 +197,7 @@ public final class com/exactpro/th2/test/spec/FilterSpec$Expectation {
 
 public final class com/exactpro/th2/test/spec/GrpcSpec {
 	public static final field Companion Lcom/exactpro/th2/test/spec/GrpcSpec$Companion;
+	public final fun configureRouter (Ljava/util/function/Consumer;)Lcom/exactpro/th2/test/spec/GrpcSpec;
 	public static final fun create ()Lcom/exactpro/th2/test/spec/GrpcSpec;
 	public final fun registerClient (Ljava/lang/Class;[Ljava/lang/String;)Lcom/exactpro/th2/test/spec/GrpcSpec;
 	public final fun registerServer (Ljava/lang/Class;)Lcom/exactpro/th2/test/spec/GrpcSpec;
@@ -204,6 +205,10 @@ public final class com/exactpro/th2/test/spec/GrpcSpec {
 
 public final class com/exactpro/th2/test/spec/GrpcSpec$Companion {
 	public final fun create ()Lcom/exactpro/th2/test/spec/GrpcSpec;
+}
+
+public final class com/exactpro/th2/test/spec/GrpcSpecKt {
+	public static final fun routerConfig (Lcom/exactpro/th2/test/spec/GrpcSpec;Lkotlin/jvm/functions/Function1;)Lcom/exactpro/th2/test/spec/GrpcSpec;
 }
 
 public final class com/exactpro/th2/test/spec/PinCollectionSpec {
@@ -240,5 +245,14 @@ public final class com/exactpro/th2/test/spec/RabbitMqSpecKt {
 	public static final fun pins (Lcom/exactpro/th2/test/spec/RabbitMqSpec;Lkotlin/jvm/functions/Function1;)Lcom/exactpro/th2/test/spec/RabbitMqSpec;
 	public static final fun publishers (Lcom/exactpro/th2/test/spec/PinsSpec;Lkotlin/jvm/functions/Function1;)V
 	public static final fun subscribers (Lcom/exactpro/th2/test/spec/PinsSpec;Lkotlin/jvm/functions/Function1;)V
+}
+
+public final class com/exactpro/th2/test/spec/RouterConfigurationSpec {
+	public final fun enableSizeMeasuring ()Lcom/exactpro/th2/test/spec/RouterConfigurationSpec;
+	public final fun withMaxDelay (J)Lcom/exactpro/th2/test/spec/RouterConfigurationSpec;
+	public final fun withMaxDelay (Ljava/time/Duration;)Lcom/exactpro/th2/test/spec/RouterConfigurationSpec;
+	public final fun withMaxRetries (I)Lcom/exactpro/th2/test/spec/RouterConfigurationSpec;
+	public final fun withMinDelay (J)Lcom/exactpro/th2/test/spec/RouterConfigurationSpec;
+	public final fun withMinDelay (Ljava/time/Duration;)Lcom/exactpro/th2/test/spec/RouterConfigurationSpec;
 }
 

@@ -16,9 +16,14 @@
 
 package com.exactpro.th2.test.spec
 
+import com.exactpro.th2.common.schema.grpc.configuration.GrpcRouterConfiguration
+import java.time.Duration
+import java.util.function.Consumer
+
 public class GrpcSpec private constructor() {
     internal val clients: MutableSet<Client> = hashSetOf()
     internal val servers: MutableSet<Class<*>> = hashSetOf()
+    internal val routerSpec = RouterConfigurationSpec()
 
     public fun registerClient(clientClass: Class<*>, vararg attributes: String): GrpcSpec = apply {
         clients += Client(clientClass, attributes.toSet())
@@ -26,6 +31,10 @@ public class GrpcSpec private constructor() {
 
     public fun registerServer(serverClass: Class<*>): GrpcSpec = apply {
         servers += serverClass
+    }
+
+    public fun configureRouter(block: Consumer<RouterConfigurationSpec>): GrpcSpec = apply {
+        block.accept(routerSpec)
     }
 
     internal class Client(
@@ -39,7 +48,48 @@ public class GrpcSpec private constructor() {
     }
 }
 
+public class RouterConfigurationSpec internal constructor() {
+    internal val routerConfig = GrpcRouterConfiguration()
+
+    public fun enableSizeMeasuring(): RouterConfigurationSpec = apply {
+        routerConfig.enableSizeMeasuring = true
+    }
+
+    public fun withMaxRetries(count: Int): RouterConfigurationSpec = apply {
+        routerConfig.retryConfiguration = routerConfig.retryConfiguration.copy(
+            maxAttempts = count,
+        )
+    }
+
+    public fun withMinDelay(delayMillis: Long): RouterConfigurationSpec = apply {
+        routerConfig.retryConfiguration = routerConfig.retryConfiguration.copy(
+            minMethodRetriesTimeout = delayMillis,
+        )
+    }
+
+    public fun withMinDelay(delay: Duration): RouterConfigurationSpec = apply {
+        routerConfig.retryConfiguration = routerConfig.retryConfiguration.copy(
+            minMethodRetriesTimeout = delay.toMillis(),
+        )
+    }
+
+    public fun withMaxDelay(delayMillis: Long): RouterConfigurationSpec = apply {
+        routerConfig.retryConfiguration = routerConfig.retryConfiguration.copy(
+            maxMethodRetriesTimeout = delayMillis,
+        )
+    }
+
+    public fun withMaxDelay(delay: Duration): RouterConfigurationSpec = apply {
+        routerConfig.retryConfiguration = routerConfig.retryConfiguration.copy(
+            maxMethodRetriesTimeout = delay.toMillis(),
+        )
+    }
+}
+
 public inline fun <reified T> GrpcSpec.client(vararg attributes: String): GrpcSpec =
     registerClient(T::class.java, *attributes)
 
 public inline fun <reified T> GrpcSpec.server(): GrpcSpec = registerServer(T::class.java)
+
+public fun GrpcSpec.routerConfig(block: RouterConfigurationSpec.() -> Unit): GrpcSpec =
+    configureRouter(Consumer(block))
