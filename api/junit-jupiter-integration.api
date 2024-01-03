@@ -52,9 +52,9 @@ public final class com/exactpro/th2/test/extension/Th2CradleExtension : org/juni
 	public fun supportsParameter (Lorg/junit/jupiter/api/extension/ParameterContext;Lorg/junit/jupiter/api/extension/ExtensionContext;)Z
 }
 
-public final class com/exactpro/th2/test/extension/Th2CustomConfigExtension : org/junit/jupiter/api/extension/BeforeEachCallback, org/junit/jupiter/api/extension/TestInstancePostProcessor {
+public final class com/exactpro/th2/test/extension/Th2CustomConfigExtension : org/junit/jupiter/api/extension/BeforeTestExecutionCallback, org/junit/jupiter/api/extension/TestInstancePostProcessor {
 	public fun <init> ()V
-	public fun beforeEach (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
+	public fun beforeTestExecution (Lorg/junit/jupiter/api/extension/ExtensionContext;)V
 	public fun postProcessTestInstance (Ljava/lang/Object;Lorg/junit/jupiter/api/extension/ExtensionContext;)V
 }
 
@@ -162,14 +162,16 @@ public final class com/exactpro/th2/test/spec/CradleSpec$Companion {
 
 public final class com/exactpro/th2/test/spec/CustomConfigSpec {
 	public static final field Companion Lcom/exactpro/th2/test/spec/CustomConfigSpec$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/util/function/Supplier;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public static final fun fromObject (Ljava/lang/Object;)Lcom/exactpro/th2/test/spec/CustomConfigSpec;
 	public static final fun fromString (Ljava/lang/String;)Lcom/exactpro/th2/test/spec/CustomConfigSpec;
+	public static final fun fromSupplier (Ljava/util/function/Supplier;)Lcom/exactpro/th2/test/spec/CustomConfigSpec;
 }
 
 public final class com/exactpro/th2/test/spec/CustomConfigSpec$Companion {
 	public final fun fromObject (Ljava/lang/Object;)Lcom/exactpro/th2/test/spec/CustomConfigSpec;
 	public final fun fromString (Ljava/lang/String;)Lcom/exactpro/th2/test/spec/CustomConfigSpec;
+	public final fun fromSupplier (Ljava/util/function/Supplier;)Lcom/exactpro/th2/test/spec/CustomConfigSpec;
 }
 
 public final class com/exactpro/th2/test/spec/FilterContainerSpec {

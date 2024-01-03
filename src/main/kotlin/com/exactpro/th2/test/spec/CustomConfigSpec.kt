@@ -17,17 +17,24 @@
 package com.exactpro.th2.test.spec
 
 import com.exactpro.th2.common.schema.factory.AbstractCommonFactory
+import java.util.function.Supplier
 
 public class CustomConfigSpec private constructor(
-    internal val content: String,
+    internal val contentSupplier: Supplier<String>,
 ) {
     public companion object {
         @JvmStatic
         public fun fromString(content: String): CustomConfigSpec =
-            CustomConfigSpec(content)
+            CustomConfigSpec { content }
 
         @JvmStatic
-        public fun fromObject(obj: Any): CustomConfigSpec =
-            CustomConfigSpec(AbstractCommonFactory.MAPPER.writeValueAsString(obj))
+        public fun fromObject(obj: Any): CustomConfigSpec {
+            val content = AbstractCommonFactory.MAPPER.writeValueAsString(obj)
+            return fromString(content)
+        }
+
+        @JvmStatic
+        public fun fromSupplier(supplier: Supplier<String>): CustomConfigSpec =
+            CustomConfigSpec(supplier)
     }
 }

@@ -20,21 +20,21 @@ import com.exactpro.th2.test.annotations.CustomConfigProvider
 import com.exactpro.th2.test.integration.ConfigurationWriter
 import com.exactpro.th2.test.spec.CustomConfigSpec
 import mu.KotlinLogging
-import org.junit.jupiter.api.extension.BeforeEachCallback
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.TestInstancePostProcessor
 import org.junit.platform.commons.support.AnnotationSupport
 import org.junit.platform.commons.support.ReflectionSupport
 import kotlin.io.path.outputStream
 
-public class Th2CustomConfigExtension : TestInstancePostProcessor, BeforeEachCallback {
+public class Th2CustomConfigExtension : TestInstancePostProcessor, BeforeTestExecutionCallback {
     private var spec: CustomConfigSpec? = null
     override fun postProcessTestInstance(testInstance: Any, context: ExtensionContext) {
         val fields = testInstance::class.findFields<CustomConfigSpec>().ifEmpty { return }
         spec = testInstance.getSingle(fields)
     }
 
-    override fun beforeEach(context: ExtensionContext) {
+    override fun beforeTestExecution(context: ExtensionContext) {
         val testClass = context.requiredTestClass
         val testMethod = context.requiredTestMethod
         val customConfigSpec: CustomConfigSpec = AnnotationSupport.findAnnotation(testMethod, CustomConfigProvider::class.java)
@@ -60,7 +60,7 @@ public class Th2CustomConfigExtension : TestInstancePostProcessor, BeforeEachCal
         LOGGER.debug { "Writing custom config to file $customConfigFile" }
         customConfigFile.outputStream().use {
             // the content is a JSON already
-            it.write(customSpec.content.toByteArray(Charsets.UTF_8))
+            it.write(customSpec.contentSupplier.get().toByteArray(Charsets.UTF_8))
         }
     }
 
