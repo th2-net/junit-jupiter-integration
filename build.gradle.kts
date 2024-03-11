@@ -8,7 +8,7 @@ plugins {
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
     id("org.jlleitschuh.gradle.ktlint") version "11.6.0"
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
-    id("org.owasp.dependencycheck") version "8.4.0"
+    id("org.owasp.dependencycheck") version "9.0.9"
     id("com.gorylenko.gradle-git-properties") version "2.4.1"
     id("com.github.jk1.dependency-license-report") version "2.5"
     id("de.undercouch.download") version "5.4.0"
@@ -92,16 +92,17 @@ publishing {
                 name.set(project.name)
                 packaging = "jar"
                 description.set(project.description)
-                url.set("")
+                val urlProvider = provider { findProperty("vcs_url") as? String }
+                url.set(urlProvider)
 
                 scm {
-                    url.set("")
+                    url.set(urlProvider)
                 }
 
                 licenses {
                     license {
                         name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
                     }
                 }
 
