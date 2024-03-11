@@ -1,5 +1,7 @@
 # th2 integration test extensions for JUnit 5
 
+![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/com.exactpro.th2/junit-jupiter-integration?server=https%3A%2F%2Fs01.oss.sonatype.org)
+
 The library contains extensions for JUnit 5 to simplify the components integration testing.
 It provides you with:
 + MQ (RabbitMQ) integration
