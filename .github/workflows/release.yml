@@ -29,6 +29,7 @@ jobs:
       build-target: 'Sonatype'
       gradleVersion: "8"
       createTag: true
+      scanner-enabled: false # because we don't really care about it here
     secrets:
       sonatypeUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
       sonatypePassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
