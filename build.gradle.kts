@@ -1,17 +1,10 @@
-import com.github.jk1.license.filter.LicenseBundleNormalizer
-import com.github.jk1.license.render.JsonReportRenderer
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-import java.net.URL
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.compatibility.validator)
     alias(libs.plugins.ktlint)
-    alias(libs.plugins.publish)
-    alias(libs.plugins.git)
-    alias(libs.plugins.dependencycheck)
-    alias(libs.plugins.licenses)
-    alias(libs.plugins.download)
+    alias(libs.plugins.th2.publish)
     `maven-publish`
     signing
 }
@@ -72,7 +65,6 @@ tasks.test {
 
 kotlin {
     explicitApi()
-    jvmToolchain(11)
 }
 
 ktlint {
@@ -80,128 +72,4 @@ ktlint {
     reporters {
         reporter(ReporterType.HTML)
     }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(project.components["java"])
-
-            pom {
-                name.set(project.name)
-                packaging = "jar"
-                description.set(project.description)
-                val urlProvider = provider { findProperty("vcs_url") as? String }
-                url.set(urlProvider)
-
-                scm {
-                    url.set(urlProvider)
-                }
-
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-
-                developers {
-                    developer {
-                        id.set("developer")
-                        name.set("developer")
-                        email.set("developer@exactpro.com")
-                    }
-                }
-            }
-        }
-    }
-    repositories {
-        // Nexus repo to publish from gitlab
-        maven {
-            name = "nexusRepository"
-            credentials {
-                username = project.findProperty("nexus_user")?.toString()
-                password = project.findProperty("nexus_password")?.toString()
-            }
-            url = project.findProperty("nexus_url").run { uri(toString()) }
-        }
-    }
-}
-
-nexusPublishing {
-    this.repositories {
-        sonatype {
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
-        }
-    }
-}
-
-signing {
-    val signingKey = findProperty("signingKey")?.toString()
-    val signingPassword = findProperty("signingPassword")?.toString()
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    sign(publishing.publications["mavenJava"])
-}
-
-// conditionals for publications
-tasks.withType<PublishToMavenRepository>().configureEach {
-    onlyIf {
-        (
-            repository == publishing.repositories["nexusRepository"] &&
-                project.hasProperty("nexus_user") &&
-                project.hasProperty("nexus_password") &&
-                project.hasProperty("nexus_url")
-            ) ||
-            (
-                repository == publishing.repositories["sonatype"] &&
-                    project.hasProperty("sonatypeUsername") &&
-                    project.hasProperty("sonatypePassword")
-                )
-    }
-}
-tasks.withType<Sign>().configureEach {
-    onlyIf {
-        project.hasProperty("signingKey") &&
-            project.hasProperty("signingPassword")
-    }
-}
-// disable running task 'initializeSonatypeStagingRepository' on a gitlab
-tasks.configureEach {
-    if (this.name == "initializeSonatypeStagingRepository" &&
-        !(project.hasProperty("sonatypeUsername") && project.hasProperty("sonatypePassword"))
-    ) {
-        this.enabled = false
-    }
-}
-
-dependencyCheck {
-    formats = listOf("SARIF", "JSON", "HTML")
-    failBuildOnCVSS = 5.0f
-    analyzers.apply {
-        assemblyEnabled = false
-        nugetconfEnabled = false
-        nodeEnabled = false
-    }
-}
-
-licenseReport {
-    val licenseNormalizerBundlePath = layout.buildDirectory.file("license-normalizer-bundle.json").get().asFile.path
-
-    if (!file(licenseNormalizerBundlePath).exists()) {
-        download.run {
-            src("https://raw.githubusercontent.com/th2-net/.github/main/license-compliance/gradle-license-report/license-normalizer-bundle.json")
-            dest(layout.buildDirectory.file("license-normalizer-bundle.json"))
-            overwrite(false)
-        }
-    }
-
-    filters = arrayOf(
-        LicenseBundleNormalizer(licenseNormalizerBundlePath, false),
-    )
-    renderers = arrayOf(
-        JsonReportRenderer("licenses.json", false),
-    )
-    excludeOwnGroup = false
-    allowedLicensesFile = URL("https://raw.githubusercontent.com/th2-net/.github/main/license-compliance/gradle-license-report/allowed-licenses.json")
 }

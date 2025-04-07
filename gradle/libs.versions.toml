@@ -14,11 +14,7 @@ junit-bom = { group = "org.junit", name = "junit-bom", version = "5.12.1" }
 testcontainers-bom = { group = "org.testcontainers", name = "testcontainers-bom", version = "1.20.6" }
 
 [plugins]
+th2-publish = { id = "com.exactpro.th2.gradle.publish", version = "0.2.4" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-licenses = { id = "com.github.jk1.dependency-license-report", version = "2.8" }
-download = { id = "de.undercouch.download", version = "5.6.0" }
-git = { id = "com.gorylenko.gradle-git-properties", version = "2.4.2" }
-publish = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.2.0" }
-dependencycheck = { id = "org.owasp.dependencycheck", version = "12.1.1" }
 compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.17.0" }
