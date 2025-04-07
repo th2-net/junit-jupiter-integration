@@ -60,7 +60,16 @@ dependencies {
 }
 
 tasks.test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        excludeTags("integration-test")
+    }
+}
+
+tasks.register<Test>("integrationTest") {
+    group = "verification"
+    useJUnitPlatform {
+        includeTags("integration-test")
+    }
 }
 
 kotlin {
