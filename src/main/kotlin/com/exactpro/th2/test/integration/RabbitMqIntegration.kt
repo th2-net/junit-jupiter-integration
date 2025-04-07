@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package com.exactpro.th2.test.integration
 
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
+import org.slf4j.LoggerFactory
 import org.testcontainers.containers.RabbitMQContainer
 import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.lifecycle.Startable
@@ -28,7 +29,7 @@ public class RabbitMqIntegration private constructor(
 ) : Startable {
     private val logger = KotlinLogging.logger { }
     internal val container = RabbitMQContainer(rabbitMqImageName)
-        .withLogConsumer(Slf4jLogConsumer(logger).withSeparateOutputStreams())
+        .withLogConsumer(Slf4jLogConsumer(LoggerFactory.getLogger(RabbitMqIntegration::class.java)).withSeparateOutputStreams())
 
     override fun start() {
         container.start()

@@ -4,15 +4,14 @@ import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import java.net.URL
 
 plugins {
-    kotlin("jvm") version "1.8.22"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
-    id("org.jlleitschuh.gradle.ktlint") version "11.6.0"
-    id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
-    id("org.owasp.dependencycheck") version "9.0.9"
-    id("com.gorylenko.gradle-git-properties") version "2.4.1"
-    id("com.github.jk1.dependency-license-report") version "2.5"
-    id("de.undercouch.download") version "5.4.0"
-
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.compatibility.validator)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.publish)
+    alias(libs.plugins.git)
+    alias(libs.plugins.dependencycheck)
+    alias(libs.plugins.licenses)
+    alias(libs.plugins.download)
     `maven-publish`
     signing
 }
@@ -34,13 +33,13 @@ java {
 }
 
 dependencies {
-    api("com.exactpro.th2:common:5.7.1-dev")
-    implementation("com.exactpro.th2:cradle-cassandra:5.1.4-dev")
-    implementation("com.exactpro.th2:grpc-service-generator:3.4.0") {
-        because("cannot work with retry configuraiton for gRPC without that")
+    api(libs.th2.common)
+    implementation(libs.th2.cradle.cassandra)
+    implementation(libs.th2.grpc.service.generator) {
+        because("cannot work with retry configuration for gRPC without that")
     }
 
-    api(platform("org.testcontainers:testcontainers-bom:1.19.0"))
+    api(platform(libs.testcontainers.bom))
     api("org.testcontainers:rabbitmq") {
         because("integration with rabbitmq")
     }
@@ -51,9 +50,9 @@ dependencies {
         because("use CQL in integration")
     }
 
-    implementation("io.github.microutils:kotlin-logging:3.0.5")
+    implementation(libs.kotlin.logging)
 
-    implementation(platform("org.junit:junit-bom:5.10.0"))
+    implementation(platform(libs.junit.bom))
     implementation("org.junit.jupiter:junit-jupiter-api")
     implementation("org.junit.platform:junit-platform-commons") {
         because("has methods to simplify the reflection")
@@ -62,7 +61,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    testImplementation("com.exactpro.th2:grpc-check1:4.2.0-dev") {
+    testImplementation(libs.th2.grpc.check1) {
         because("test gRPC integration")
     }
 }
@@ -187,12 +186,12 @@ dependencyCheck {
 }
 
 licenseReport {
-    val licenseNormalizerBundlePath = "$buildDir/license-normalizer-bundle.json"
+    val licenseNormalizerBundlePath = layout.buildDirectory.file("license-normalizer-bundle.json").get().asFile.path
 
     if (!file(licenseNormalizerBundlePath).exists()) {
         download.run {
             src("https://raw.githubusercontent.com/th2-net/.github/main/license-compliance/gradle-license-report/license-normalizer-bundle.json")
-            dest("$buildDir/license-normalizer-bundle.json")
+            dest(layout.buildDirectory.file("license-normalizer-bundle.json"))
             overwrite(false)
         }
     }

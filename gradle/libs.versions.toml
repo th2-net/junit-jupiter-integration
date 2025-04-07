@@ -1,0 +1,24 @@
+[versions]
+kotlin = "1.8.22"
+cradle = "5.5.0-dev"
+
+[libraries]
+th2-common = { group = "com.exactpro.th2", name = "common", version = "5.15.0-dev" }
+th2-cradle-cassandra = { group = "com.exactpro.th2", name = "cradle-cassandra", version.ref = "cradle" }
+th2-grpc-service-generator = { group = "com.exactpro.th2", name = "grpc-service-generator", version = "3.8.0" }
+th2-grpc-check1 = { group = "com.exactpro.th2", name = "grpc-check1", version = "4.4.0-dev" }
+
+kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging", version = "5.1.4" }
+
+junit-bom = { group = "org.junit", name = "junit-bom", version = "5.12.1" }
+testcontainers-bom = { group = "org.testcontainers", name = "testcontainers-bom", version = "1.20.6" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+licenses = { id = "com.github.jk1.dependency-license-report", version = "2.8" }
+download = { id = "de.undercouch.download", version = "5.6.0" }
+git = { id = "com.gorylenko.gradle-git-properties", version = "2.4.2" }
+publish = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.2.0" }
+dependencycheck = { id = "org.owasp.dependencycheck", version = "12.1.1" }
+compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.17.0" }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package com.exactpro.th2.test.integration
 
 import com.datastax.oss.driver.api.core.CqlSession
-import mu.KotlinLogging
-import org.testcontainers.containers.CassandraContainer
+import org.slf4j.LoggerFactory
+import org.testcontainers.cassandra.CassandraContainer
 import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.lifecycle.Startable
 import org.testcontainers.utility.DockerImageName
@@ -27,8 +27,8 @@ import java.util.function.Consumer
 public class CradleIntegration private constructor(
     cassandraImageName: DockerImageName,
 ) : Startable {
-    internal val container = CassandraContainer<Nothing>(cassandraImageName).apply {
-        withLogConsumer(Slf4jLogConsumer(LOGGER).withSeparateOutputStreams())
+    internal val container = CassandraContainer(cassandraImageName).apply {
+        withLogConsumer(Slf4jLogConsumer(LoggerFactory.getLogger(CradleIntegration::class.java)).withSeparateOutputStreams())
     }
 
     override fun start() {
@@ -39,7 +39,7 @@ public class CradleIntegration private constructor(
         container.stop()
     }
 
-    public fun configureContainer(block: Consumer<CassandraContainer<Nothing>>): CradleIntegration = apply {
+    public fun configureContainer(block: Consumer<CassandraContainer>): CradleIntegration = apply {
         block.accept(container)
     }
 
@@ -54,8 +54,6 @@ public class CradleIntegration private constructor(
     }
 
     public companion object {
-        private val LOGGER = KotlinLogging.logger { }
-
         @JvmField
         public val DEFAULT_IMAGE: DockerImageName = DockerImageName.parse("cassandra:4.0.5")
 
@@ -68,5 +66,5 @@ public class CradleIntegration private constructor(
     }
 }
 
-public fun CradleIntegration.container(block: CassandraContainer<Nothing>.() -> Unit): CradleIntegration =
+public fun CradleIntegration.container(block: CassandraContainer.() -> Unit): CradleIntegration =
     configureContainer(Consumer(block))
