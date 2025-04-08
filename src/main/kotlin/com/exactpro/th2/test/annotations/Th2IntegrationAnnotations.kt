@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,15 +23,12 @@ import com.exactpro.th2.test.extension.Th2CradleExtension
 import com.exactpro.th2.test.extension.Th2CustomConfigExtension
 import com.exactpro.th2.test.extension.Th2GrpcExtension
 import com.exactpro.th2.test.extension.Th2RabbitMqExtension
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * `@Th2IntegrationTest` is a JUnit Jupiter extension to activate automatic
  * setup MQ and Cradle services for integration testing.
- *
- * `@Th2IntegrationTest` includes `@Tag("integration-test")` annotation
  *
  * The th2Integration extension configures required services based on the fields
  * defined in the test class.
@@ -84,7 +81,6 @@ import org.junit.jupiter.api.extension.ExtendWith
     Th2CommonFactoryExtension::class,
     CleanupExtension::class,
 )
-@Tag("integration-test")
 public annotation class Th2IntegrationTest
 
 /**
