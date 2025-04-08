@@ -26,6 +26,7 @@ java {
 }
 
 dependencies {
+    api(platform(libs.th2.bom))
     api(libs.th2.common)
     implementation(libs.th2.cradle.cassandra)
     implementation(libs.th2.grpc.service.generator) {
@@ -35,6 +36,9 @@ dependencies {
     api(platform(libs.testcontainers.bom))
     api("org.testcontainers:rabbitmq") {
         because("integration with rabbitmq")
+    }
+    api(libs.commons.compress) {
+        because("'1.24.0' version has CVE-2024-25710, CVE-2024-26308 vulnerabilities")
     }
     api("org.testcontainers:cassandra") {
         because("integration with cradle")
@@ -49,6 +53,13 @@ dependencies {
     implementation("org.junit.jupiter:junit-jupiter-api")
     implementation("org.junit.platform:junit-platform-commons") {
         because("has methods to simplify the reflection")
+    }
+
+    ktlint(libs.logback.core) {
+        because("'1.3.5' version has CVE-2023-6378, CVE-2024-12798, CVE-2024-12801 vulnerabilities")
+    }
+    ktlint(libs.logback.classic) {
+        because("'1.3.5' version has CVE-2023-6378 vulnerability")
     }
 
     testImplementation("org.junit.jupiter:junit-jupiter")
