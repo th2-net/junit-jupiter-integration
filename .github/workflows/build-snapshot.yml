@@ -1,7 +1,7 @@
 name: Build and publish jar to sonatype snapshot repository
 
 on:
-  push:
+  pull_request:
     branches-ignore:
       - master
       - version-*
