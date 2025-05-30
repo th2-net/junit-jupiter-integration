@@ -16,7 +16,7 @@ logback-core = { group = "ch.qos.logback", name = "logback-core", version.ref = 
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
 
 junit-bom = { group = "org.junit", name = "junit-bom", version = "5.12.2" }
-testcontainers-bom = { group = "org.testcontainers", name = "testcontainers-bom", version = "1.21.0" }
+testcontainers-bom = { group = "org.testcontainers", name = "testcontainers-bom", version = "1.21.1" }
 
 [plugins]
 th2-publish = { id = "com.exactpro.th2.gradle.publish", version = "0.2.4" }
