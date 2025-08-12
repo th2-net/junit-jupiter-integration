@@ -15,7 +15,7 @@ commons-compress = { group = "org.apache.commons", name = "commons-compress", ve
 logback-core = { group = "ch.qos.logback", name = "logback-core", version.ref = "logback" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
 
-junit-bom = { group = "org.junit", name = "junit-bom", version = "5.13.2" }
+junit-bom = { group = "org.junit", name = "junit-bom", version = "5.13.4" }
 testcontainers-bom = { group = "org.testcontainers", name = "testcontainers-bom", version = "1.21.3" }
 
 [plugins]
