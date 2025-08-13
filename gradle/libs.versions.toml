@@ -1,16 +1,16 @@
 [versions]
-kotlin = "1.8.22"
+kotlin = "2.2.0"
 cradle = "5.6.0-dev"
 logback = "1.5.18"
 
 [libraries]
 th2-bom = { group = "com.exactpro.th2", name = "bom", version = "4.13.1" }
-th2-common = { group = "com.exactpro.th2", name = "common", version = "5.15.0-dev" }
+th2-common = { group = "com.exactpro.th2", name = "common", version = "5.16.0-dev" }
 th2-cradle-cassandra = { group = "com.exactpro.th2", name = "cradle-cassandra", version.ref = "cradle" }
 th2-grpc-service-generator = { group = "com.exactpro.th2", name = "grpc-service-generator", version = "3.8.2" }
 th2-grpc-check1 = { group = "com.exactpro.th2", name = "grpc-check1", version = "4.4.1-dev" }
 
-kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging", version = "5.1.4" }
+kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging", version = "7.0.12" }
 commons-compress = { group = "org.apache.commons", name = "commons-compress", version = "1.28.0" }
 logback-core = { group = "ch.qos.logback", name = "logback-core", version.ref = "logback" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
