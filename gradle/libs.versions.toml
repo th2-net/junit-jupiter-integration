@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.8.22"
+kotlin = "2.2.0"
 cradle = "5.6.0-dev"
 logback = "1.5.18"
 
