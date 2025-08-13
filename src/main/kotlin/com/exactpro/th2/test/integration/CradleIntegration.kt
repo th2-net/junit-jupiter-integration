@@ -27,9 +27,10 @@ import java.util.function.Consumer
 public class CradleIntegration private constructor(
     cassandraImageName: DockerImageName,
 ) : Startable {
-    internal val container = CassandraContainer(cassandraImageName).apply {
-        withLogConsumer(Slf4jLogConsumer(LoggerFactory.getLogger(CradleIntegration::class.java)).withSeparateOutputStreams())
-    }
+    internal val container =
+        CassandraContainer(cassandraImageName).apply {
+            withLogConsumer(Slf4jLogConsumer(LoggerFactory.getLogger(CradleIntegration::class.java)).withSeparateOutputStreams())
+        }
 
     override fun start() {
         container.start()
@@ -39,15 +40,18 @@ public class CradleIntegration private constructor(
         container.stop()
     }
 
-    public fun configureContainer(block: Consumer<CassandraContainer>): CradleIntegration = apply {
-        block.accept(container)
-    }
+    public fun configureContainer(block: Consumer<CassandraContainer>): CradleIntegration =
+        apply {
+            block.accept(container)
+        }
 
     internal fun recreateKeyspace(keyspace: String) {
-        CqlSession.builder()
+        CqlSession
+            .builder()
             .addContactPoint(container.contactPoint)
             .withLocalDatacenter(container.localDatacenter)
-            .build().use {
+            .build()
+            .use {
                 it.execute("DROP KEYSPACE IF EXISTS $keyspace")
                 it.execute("CREATE KEYSPACE $keyspace WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 1};")
             }
@@ -61,10 +65,8 @@ public class CradleIntegration private constructor(
         public fun defaultImage(): CradleIntegration = CradleIntegration(DEFAULT_IMAGE)
 
         @JvmStatic
-        public fun fromImage(imageName: DockerImageName): CradleIntegration =
-            CradleIntegration(imageName)
+        public fun fromImage(imageName: DockerImageName): CradleIntegration = CradleIntegration(imageName)
     }
 }
 
-public fun CradleIntegration.container(block: CassandraContainer.() -> Unit): CradleIntegration =
-    configureContainer(Consumer(block))
+public fun CradleIntegration.container(block: CassandraContainer.() -> Unit): CradleIntegration = configureContainer(Consumer(block))

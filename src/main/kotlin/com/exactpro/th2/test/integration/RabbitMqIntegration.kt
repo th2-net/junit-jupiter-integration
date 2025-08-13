@@ -28,8 +28,9 @@ public class RabbitMqIntegration private constructor(
     rabbitMqImageName: DockerImageName,
 ) : Startable {
     private val logger = KotlinLogging.logger { }
-    internal val container = RabbitMQContainer(rabbitMqImageName)
-        .withLogConsumer(Slf4jLogConsumer(LoggerFactory.getLogger(RabbitMqIntegration::class.java)).withSeparateOutputStreams())
+    internal val container =
+        RabbitMQContainer(rabbitMqImageName)
+            .withLogConsumer(Slf4jLogConsumer(LoggerFactory.getLogger(RabbitMqIntegration::class.java)).withSeparateOutputStreams())
 
     override fun start() {
         container.start()
@@ -39,51 +40,58 @@ public class RabbitMqIntegration private constructor(
         container.stop()
     }
 
-    public fun configureContainer(block: Consumer<RabbitMQContainer>): RabbitMqIntegration = apply {
-        block.accept(container)
-    }
+    public fun configureContainer(block: Consumer<RabbitMQContainer>): RabbitMqIntegration =
+        apply {
+            block.accept(container)
+        }
 
-    public fun withDurableExchange(): RabbitMqIntegration = apply {
-        withExchange(true)
-    }
+    public fun withDurableExchange(): RabbitMqIntegration =
+        apply {
+            withExchange(true)
+        }
 
-    public fun withDefaultExchange(): RabbitMqIntegration = apply {
-        withExchange(false)
-    }
+    public fun withDefaultExchange(): RabbitMqIntegration =
+        apply {
+            withExchange(false)
+        }
 
     @JvmOverloads
     public fun withQueue(
         queueName: String,
         durable: Boolean = false,
-    ): RabbitMqIntegration = apply {
-        container.withQueue(queueName, false, durable, emptyMap())
-    }
+    ): RabbitMqIntegration =
+        apply {
+            container.withQueue(queueName, false, durable, emptyMap())
+        }
 
     public fun withBinding(
         queueName: String,
         routingKey: String,
-    ): RabbitMqIntegration = apply {
-        container.withBinding(
-            DEFAULT_EXCHANGE,
-            queueName,
-            emptyMap(),
-            routingKey,
-            QUEUE_DESTINATION_TYPE,
-        )
-    }
+    ): RabbitMqIntegration =
+        apply {
+            container.withBinding(
+                DEFAULT_EXCHANGE,
+                queueName,
+                emptyMap(),
+                routingKey,
+                QUEUE_DESTINATION_TYPE,
+            )
+        }
 
-    public fun purgeQueue(queueName: String): RabbitMqIntegration = apply {
-        check(container.isRunning) { "cannot clear queue in not running container" }
-        val result = container.execInContainer(
-            "rabbitmqadmin",
-            "purge",
-            "queue",
-            "name=$queueName",
-        )
-        check(result.exitCode == 0) { "cannot purge queue $queueName: ${result.stderr}" }
-        logger.debug { "Purge output: ${result.stdout}" }
-        logger.debug { "Purge error: ${result.stderr}" }
-    }
+    public fun purgeQueue(queueName: String): RabbitMqIntegration =
+        apply {
+            check(container.isRunning) { "cannot clear queue in not running container" }
+            val result =
+                container.execInContainer(
+                    "rabbitmqadmin",
+                    "purge",
+                    "queue",
+                    "name=$queueName",
+                )
+            check(result.exitCode == 0) { "cannot purge queue $queueName: ${result.stderr}" }
+            logger.debug { "Purge output: ${result.stdout}" }
+            logger.debug { "Purge error: ${result.stderr}" }
+        }
 
     private fun withExchange(durable: Boolean) {
         container.withExchange(
@@ -102,8 +110,7 @@ public class RabbitMqIntegration private constructor(
         private const val QUEUE_DESTINATION_TYPE: String = "queue"
 
         @JvmStatic
-        public fun fromImage(imageName: String): RabbitMqIntegration =
-            RabbitMqIntegration(DockerImageName.parse(imageName))
+        public fun fromImage(imageName: String): RabbitMqIntegration = RabbitMqIntegration(DockerImageName.parse(imageName))
 
         @JvmStatic
         public fun defaultImage(): RabbitMqIntegration = RabbitMqIntegration(DEFAULT_IMAGE)
@@ -114,5 +121,4 @@ public class RabbitMqIntegration private constructor(
     }
 }
 
-public fun RabbitMqIntegration.container(block: RabbitMQContainer.() -> Unit): RabbitMqIntegration =
-    configureContainer(Consumer(block))
+public fun RabbitMqIntegration.container(block: RabbitMQContainer.() -> Unit): RabbitMqIntegration = configureContainer(Consumer(block))

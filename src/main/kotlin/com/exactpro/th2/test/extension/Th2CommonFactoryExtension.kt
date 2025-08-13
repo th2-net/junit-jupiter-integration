@@ -32,14 +32,19 @@ import org.junit.jupiter.api.extension.ParameterResolver
 import java.nio.file.Path
 import kotlin.io.path.outputStream
 
-public class Th2CommonFactoryExtension : BeforeAllCallback, BeforeEachCallback, AfterEachCallback, ParameterResolver {
+public class Th2CommonFactoryExtension :
+    BeforeAllCallback,
+    BeforeEachCallback,
+    AfterEachCallback,
+    ParameterResolver {
     private class FactoryHolder(
         folder: Path,
     ) {
-        val factory: CommonFactory = CommonFactory.createFromArguments(
-            "-c",
-            folder.toAbsolutePath().toString(),
-        )
+        val factory: CommonFactory =
+            CommonFactory.createFromArguments(
+                "-c",
+                folder.toAbsolutePath().toString(),
+            )
     }
 
     private lateinit var appCommonFactory: FactoryHolder
@@ -72,7 +77,10 @@ public class Th2CommonFactoryExtension : BeforeAllCallback, BeforeEachCallback, 
         }
     }
 
-    private fun cleanUp(holder: FactoryHolder, name: String) {
+    private fun cleanUp(
+        holder: FactoryHolder,
+        name: String,
+    ) {
         LOGGER.info { "Cleaning factory $name" }
         runCatching {
             holder.factory.close()
@@ -82,15 +90,16 @@ public class Th2CommonFactoryExtension : BeforeAllCallback, BeforeEachCallback, 
         LOGGER.info { "Cleaning factory $name done" }
     }
 
-    override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean {
-        return parameterContext.parameter.type == CommonFactory::class.java
-    }
+    override fun supportsParameter(
+        parameterContext: ParameterContext,
+        extensionContext: ExtensionContext,
+    ): Boolean = parameterContext.parameter.type == CommonFactory::class.java
 
     override fun resolveParameter(
         parameterContext: ParameterContext,
         extensionContext: ExtensionContext,
-    ): CommonFactory {
-        return when {
+    ): CommonFactory =
+        when {
             parameterContext.isAnnotated(Th2AppFactory::class.java) -> {
                 check(::appCommonFactory.isInitialized) { "app factory is not initialized" }
                 appCommonFactory.factory
@@ -103,7 +112,6 @@ public class Th2CommonFactoryExtension : BeforeAllCallback, BeforeEachCallback, 
 
             else -> error("parameter must be annotated with ${Th2AppFactory::class} or ${Th2TestFactory::class} annotation")
         }
-    }
 
     private fun Path.writeConfiguration(name: String) {
         resolve(ConfigurationWriter.PROMETHEUS_CONFIG).outputStream().use {
