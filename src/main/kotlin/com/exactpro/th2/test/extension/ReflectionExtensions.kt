@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,10 @@ import org.junit.platform.commons.support.ReflectionSupport
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
 
-private fun List<Field>.definitions(): String {
-    return joinToString {
+private fun List<Field>.definitions(): String =
+    joinToString {
         "${it.name} in ${it.declaringClass}"
     }
-}
 
 internal inline fun <reified T> Any.getSingle(fields: List<Field>): T {
     require(fields.size == 1) {
@@ -53,10 +52,9 @@ internal inline fun <reified T> Any.getFieldOrDefault(default: () -> T): T {
         ?: default()
 }
 
-internal inline fun <reified T> KClass<*>.findFields(): List<Field> {
-    return ReflectionSupport.findFields(
+internal inline fun <reified T> KClass<*>.findFields(): List<Field> =
+    ReflectionSupport.findFields(
         java,
         { field -> field.type == T::class.java },
         HierarchyTraversalMode.TOP_DOWN,
     )
-}
