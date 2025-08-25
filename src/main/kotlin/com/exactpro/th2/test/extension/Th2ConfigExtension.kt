@@ -26,7 +26,9 @@ import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createDirectory
 import kotlin.io.path.deleteRecursively
 
-public class Th2ConfigExtension : BeforeAllCallback, AfterAllCallback {
+public class Th2ConfigExtension :
+    BeforeAllCallback,
+    AfterAllCallback {
     override fun beforeAll(context: ExtensionContext) {
         val store = context.getStore(Th2.NAMESPACE)
         val root = Files.createTempDirectory("th2")
@@ -38,7 +40,9 @@ public class Th2ConfigExtension : BeforeAllCallback, AfterAllCallback {
 
     @OptIn(ExperimentalPathApi::class)
     override fun afterAll(context: ExtensionContext) {
-        context.getStore(Th2.NAMESPACE).get(ROOT_CONFIG, Path::class.java)
+        context
+            .getStore(Th2.NAMESPACE)
+            .get(ROOT_CONFIG, Path::class.java)
             ?.also {
                 LOGGER.info { "Cleaning config dirs $it" }
                 it.deleteRecursively()
