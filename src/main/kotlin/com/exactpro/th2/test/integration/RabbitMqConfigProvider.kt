@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,8 @@ import com.exactpro.th2.test.spec.PinSpec
 import com.exactpro.th2.test.spec.RabbitMqSpec
 
 internal object RabbitMqConfigProvider {
-
-    fun getConnectionConfig(rabbitmq: RabbitMqIntegration): RabbitMQConfiguration {
-        return RabbitMQConfiguration(
+    fun getConnectionConfig(rabbitmq: RabbitMqIntegration): RabbitMQConfiguration =
+        RabbitMQConfiguration(
             host = rabbitmq.container.host,
             vHost = "",
             port = rabbitmq.container.amqpPort,
@@ -35,19 +34,20 @@ internal object RabbitMqConfigProvider {
             password = rabbitmq.container.adminPassword,
             exchangeName = RabbitMqIntegration.DEFAULT_EXCHANGE,
         )
-    }
 
     /**
      * Returns [MessageRouterConfiguration] that can be used by component under the test
      */
     fun getComponentConfig(spec: RabbitMqSpec): MessageRouterConfiguration {
-        val publishers = spec.pinsSpec.publishers.pins.mapValues { (name, spec) ->
-            pinSpecToConfiguration(name, spec, isPublisher = true)
-        }
+        val publishers =
+            spec.pinsSpec.publishers.pins.mapValues { (name, spec) ->
+                pinSpecToConfiguration(name, spec, isPublisher = true)
+            }
 
-        val subscribers = spec.pinsSpec.subscribers.pins.mapValues { (name, spec) ->
-            pinSpecToConfiguration(name, spec, isPublisher = false)
-        }
+        val subscribers =
+            spec.pinsSpec.subscribers.pins.mapValues { (name, spec) ->
+                pinSpecToConfiguration(name, spec, isPublisher = false)
+            }
 
         return MessageRouterConfiguration(
             queues = publishers + subscribers,
@@ -58,31 +58,36 @@ internal object RabbitMqConfigProvider {
      * Returns [MessageRouterConfiguration] that can be used to send/receive message to component under the test
      */
     fun getTestConfig(spec: RabbitMqSpec): MessageRouterConfiguration {
-        val queuesForPublishers = spec.pinsSpec.publishers.pins.mapValues { (name, spec) ->
-            pinSpecToConfiguration(
-                name,
-                spec,
-                isPublisher = false,
-                ignoreFilters = true,
-                attributes = spec.attributeSet.replaceValues(
-                    QueueAttribute.PUBLISH.value to QueueAttribute.SUBSCRIBE.value,
-                ) + listOf(name),
-            )
-        }
+        val queuesForPublishers =
+            spec.pinsSpec.publishers.pins.mapValues { (name, spec) ->
+                pinSpecToConfiguration(
+                    name,
+                    spec,
+                    isPublisher = false,
+                    ignoreFilters = true,
+                    attributes =
+                        spec.attributeSet.replaceValues(
+                            QueueAttribute.PUBLISH.value to QueueAttribute.SUBSCRIBE.value,
+                        ) + listOf(name),
+                )
+            }
 
-        val routingForSubscribers = spec.pinsSpec.subscribers.pins.mapValues { (name, spec) ->
-            pinSpecToConfiguration(
-                name,
-                spec,
-                isPublisher = true,
-                ignoreFilters = true,
-                attributes = spec.attributeSet.replaceValues(
-                    QueueAttribute.SUBSCRIBE.value to QueueAttribute.PUBLISH.value,
-                ) + listOf(name),
-            )
-        }
-        val queues: MutableMap<String, QueueConfiguration> = (queuesForPublishers + routingForSubscribers)
-            .toMutableMap()
+        val routingForSubscribers =
+            spec.pinsSpec.subscribers.pins.mapValues { (name, spec) ->
+                pinSpecToConfiguration(
+                    name,
+                    spec,
+                    isPublisher = true,
+                    ignoreFilters = true,
+                    attributes =
+                        spec.attributeSet.replaceValues(
+                            QueueAttribute.SUBSCRIBE.value to QueueAttribute.PUBLISH.value,
+                        ) + listOf(name),
+                )
+            }
+        val queues: MutableMap<String, QueueConfiguration> =
+            (queuesForPublishers + routingForSubscribers)
+                .toMutableMap()
         addEventRoutingForTestFactory(queues)
         return MessageRouterConfiguration(
             queues = queues,
@@ -91,26 +96,25 @@ internal object RabbitMqConfigProvider {
 
     private fun addEventRoutingForTestFactory(queues: MutableMap<String, QueueConfiguration>) {
         val key = "events-${System.currentTimeMillis()}"
-        queues[key] = QueueConfiguration(
-            routingKey = key,
-            queue = "",
-            exchange = RabbitMqIntegration.DEFAULT_EXCHANGE,
-            attributes = listOf(QueueAttribute.PUBLISH.value, QueueAttribute.EVENT.value),
-            isWritable = true,
-            isReadable = false,
-        )
+        queues[key] =
+            QueueConfiguration(
+                routingKey = key,
+                queue = "",
+                exchange = RabbitMqIntegration.DEFAULT_EXCHANGE,
+                attributes = listOf(QueueAttribute.PUBLISH.value, QueueAttribute.EVENT.value),
+                isWritable = true,
+                isReadable = false,
+            )
     }
 
-    private fun Set<String>.replaceValues(
-        vararg pairs: Pair<String, String>,
-    ): List<String> {
-        return toMutableSet().apply {
-            for ((current, new) in pairs) {
-                remove(current)
-                add(new)
-            }
-        }.toList()
-    }
+    private fun Set<String>.replaceValues(vararg pairs: Pair<String, String>): List<String> =
+        toMutableSet()
+            .apply {
+                for ((current, new) in pairs) {
+                    remove(current)
+                    add(new)
+                }
+            }.toList()
 
     private fun pinSpecToConfiguration(
         name: String,
@@ -125,11 +129,12 @@ internal object RabbitMqConfigProvider {
         attributes = attributes,
         isReadable = !isPublisher,
         isWritable = isPublisher,
-        filters = spec.filters.takeUnless { ignoreFilters }?.map {
-            MqRouterFilterConfiguration(
-                it.message.filters,
-                it.metadata.filters,
-            )
-        } ?: emptyList(),
+        filters =
+            spec.filters.takeUnless { ignoreFilters }?.map {
+                MqRouterFilterConfiguration(
+                    it.message.filters,
+                    it.metadata.filters,
+                )
+            } ?: emptyList(),
     )
 }

@@ -27,7 +27,11 @@ import org.junit.jupiter.api.extension.ParameterResolver
 import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils
 import java.util.LinkedList
 
-public class CleanupExtension : BeforeEachCallback, BeforeAllCallback, AfterEachCallback, ParameterResolver {
+public class CleanupExtension :
+    BeforeEachCallback,
+    BeforeAllCallback,
+    AfterEachCallback,
+    ParameterResolver {
     override fun beforeEach(context: ExtensionContext) {
         context.getStore(NAMESPACE).put(AFTER_TEST_KEY, ClosableRegistry(Registry()))
     }
@@ -48,7 +52,11 @@ public class CleanupExtension : BeforeEachCallback, BeforeAllCallback, AfterEach
         public fun add(resource: AutoCloseable) {
             add(RandomStringUtils.randomAlphabetic(10), resource)
         }
-        public fun add(name: String, resource: AutoCloseable) {
+
+        public fun add(
+            name: String,
+            resource: AutoCloseable,
+        ) {
             check(resources.find { it.first == name } == null) {
                 "duplicated resource $name"
             }
@@ -59,7 +67,6 @@ public class CleanupExtension : BeforeEachCallback, BeforeAllCallback, AfterEach
     private class ClosableRegistry(
         val registry: Registry,
     ) : ExtensionContext.Store.CloseableResource {
-
         override fun close() {
             registry.resources.descendingIterator().forEach { (name, resource) ->
                 runCatching {
@@ -72,18 +79,22 @@ public class CleanupExtension : BeforeEachCallback, BeforeAllCallback, AfterEach
         }
     }
 
-    override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean {
-        return parameterContext.parameter.type == Registry::class.java
-    }
+    override fun supportsParameter(
+        parameterContext: ParameterContext,
+        extensionContext: ExtensionContext,
+    ): Boolean = parameterContext.parameter.type == Registry::class.java
 
-    override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
+    override fun resolveParameter(
+        parameterContext: ParameterContext,
+        extensionContext: ExtensionContext,
+    ): Any {
         val store = extensionContext.getStore(NAMESPACE)
         // if we have registry for AFTER_TEST_KEY key it means the parameter is resolved for test method
         // or in before
         val autoClosableRegistry = (
             store.get(AFTER_TEST_KEY, ClosableRegistry::class.java)
                 ?: store.get(AFTER_ALL_KEY, ClosableRegistry::class.java)
-            )
+        )
         return autoClosableRegistry?.registry ?: error("registry is not created")
     }
 
