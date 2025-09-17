@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.2.10"
-cradle = "5.6.0-dev"
+cradle = "5.7.0-dev"
 logback = "1.5.18"
 
 [libraries]
