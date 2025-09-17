@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,7 @@ public class CustomConfigSpec private constructor(
 ) {
     public companion object {
         @JvmStatic
-        public fun fromString(content: String): CustomConfigSpec =
-            CustomConfigSpec { content }
+        public fun fromString(content: String): CustomConfigSpec = CustomConfigSpec { content }
 
         @JvmStatic
         public fun fromObject(obj: Any): CustomConfigSpec {
@@ -34,7 +33,6 @@ public class CustomConfigSpec private constructor(
         }
 
         @JvmStatic
-        public fun fromSupplier(supplier: Supplier<String>): CustomConfigSpec =
-            CustomConfigSpec(supplier)
+        public fun fromSupplier(supplier: Supplier<String>): CustomConfigSpec = CustomConfigSpec(supplier)
     }
 }
