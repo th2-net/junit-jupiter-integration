@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,18 +25,23 @@ import com.exactpro.th2.common.schema.grpc.configuration.GrpcServiceConfiguratio
 import com.exactpro.th2.common.schema.strategy.route.impl.RobinRoutingStrategy
 import com.exactpro.th2.test.integration.ConfigurationWriter
 import com.exactpro.th2.test.spec.GrpcSpec
+import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.TestInstancePostProcessor
-import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils
 import java.io.IOException
 import java.net.ServerSocket
 import kotlin.io.path.outputStream
 
-public class Th2GrpcExtension : TestInstancePostProcessor, BeforeAllCallback {
+public class Th2GrpcExtension :
+    TestInstancePostProcessor,
+    BeforeAllCallback {
     private var spec: GrpcSpec? = null
 
-    override fun postProcessTestInstance(testInstance: Any, context: ExtensionContext) {
+    override fun postProcessTestInstance(
+        testInstance: Any,
+        context: ExtensionContext,
+    ) {
         val fields = testInstance::class.findFields<GrpcSpec>().ifEmpty { return }
         spec = testInstance.getSingle(fields)
     }
@@ -76,20 +81,25 @@ public class Th2GrpcExtension : TestInstancePostProcessor, BeforeAllCallback {
         testPort: Int,
     ) = GrpcConfiguration(
         serverConfiguration = GrpcServerConfiguration(port = appPort),
-        services = grpcSpec.clients.associate {
-            "${it.type.simpleName}-${RandomStringUtils.randomAlphabetic(5)}" to GrpcServiceConfiguration(
-                strategy = RobinRoutingStrategy().apply {
-                    init(GrpcRawRobinStrategy(endpoints = listOf("test-endpoint")))
-                },
-                serviceClass = it.type,
-                endpoints = mapOf(
-                    "test-endpoint" to GrpcEndpointConfiguration(
-                        host = "localhost",
-                        port = testPort,
-                        attributes = it.attributes.toList(),
+        services =
+        grpcSpec.clients.associate {
+            "${it.type.simpleName}-${RandomStringUtils.insecure().nextAlphabetic(5)}" to
+                GrpcServiceConfiguration(
+                    strategy =
+                    RobinRoutingStrategy().apply {
+                        init(GrpcRawRobinStrategy(endpoints = listOf("test-endpoint")))
+                    },
+                    serviceClass = it.type,
+                    endpoints =
+                    mapOf(
+                        "test-endpoint" to
+                            GrpcEndpointConfiguration(
+                                host = "localhost",
+                                port = testPort,
+                                attributes = it.attributes.toList(),
+                            ),
                     ),
-                ),
-            )
+                )
         },
     )
 
@@ -99,23 +109,31 @@ public class Th2GrpcExtension : TestInstancePostProcessor, BeforeAllCallback {
         testPort: Int,
     ) = GrpcConfiguration(
         serverConfiguration = GrpcServerConfiguration(port = testPort),
-        services = grpcSpec.servers.associate {
-            "${it.simpleName}-${RandomStringUtils.randomAlphabetic(5)}" to GrpcServiceConfiguration(
-                strategy = RobinRoutingStrategy().apply {
-                    init(GrpcRawRobinStrategy(endpoints = listOf("test-endpoint")))
-                },
-                serviceClass = it,
-                endpoints = mapOf(
-                    "test-endpoint" to GrpcEndpointConfiguration(
-                        host = "localhost",
-                        port = appPort,
+        services =
+        grpcSpec.servers.associate {
+            "${it.simpleName}-${RandomStringUtils.insecure().nextAlphabetic(5)}" to
+                GrpcServiceConfiguration(
+                    strategy =
+                    RobinRoutingStrategy().apply {
+                        init(GrpcRawRobinStrategy(endpoints = listOf("test-endpoint")))
+                    },
+                    serviceClass = it,
+                    endpoints =
+                    mapOf(
+                        "test-endpoint" to
+                            GrpcEndpointConfiguration(
+                                host = "localhost",
+                                port = appPort,
+                            ),
                     ),
-                ),
-            )
+                )
         },
     )
 
-    private fun findFreePort(start: Int = 1025, end: Int = 30000): Int {
+    private fun findFreePort(
+        start: Int = 1025,
+        end: Int = 30000,
+    ): Int {
         for (port in start..end) {
             try {
                 ServerSocket(port).use {

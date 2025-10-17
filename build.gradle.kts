@@ -34,13 +34,13 @@ dependencies {
     }
 
     api(platform(libs.testcontainers.bom))
-    api("org.testcontainers:rabbitmq") {
+    api("org.testcontainers:testcontainers-rabbitmq") {
         because("integration with rabbitmq")
     }
     api(libs.commons.compress) {
         because("'1.24.0' version has CVE-2024-25710, CVE-2024-26308 vulnerabilities")
     }
-    api("org.testcontainers:cassandra") {
+    api("org.testcontainers:testcontainers-cassandra") {
         because("integration with cradle")
     }
     implementation("com.datastax.oss:java-driver-core") {
