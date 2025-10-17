@@ -35,7 +35,6 @@ import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
-import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolver
 import org.junit.jupiter.api.extension.TestInstancePostProcessor
@@ -170,7 +169,7 @@ public class Th2CradleExtension :
 
     private class ClosableCradleResource(
         val manager: CradleManager,
-    ) : CloseableResource {
+    ) : AutoCloseable {
         override fun close() {
             LOGGER.info { "Closing cradle manager resolved as a parameter" }
             manager.close()
