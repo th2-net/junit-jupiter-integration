@@ -4,7 +4,7 @@ cradle = "5.7.0-dev"
 logback = "1.5.20"
 
 [libraries]
-th2-bom = { group = "com.exactpro.th2", name = "bom", version = "4.14.1" }
+th2-bom = { group = "com.exactpro.th2", name = "bom", version = "4.14.2" }
 th2-common = { group = "com.exactpro.th2", name = "common", version = "5.16.1-dev" }
 th2-cradle-cassandra = { group = "com.exactpro.th2", name = "cradle-cassandra", version.ref = "cradle" }
 th2-grpc-service-generator = { group = "com.exactpro.th2", name = "grpc-service-generator", version = "3.8.4" }
