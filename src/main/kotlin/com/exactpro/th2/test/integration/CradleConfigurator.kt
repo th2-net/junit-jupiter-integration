@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,10 @@ package com.exactpro.th2.test.integration
 import com.exactpro.th2.test.spec.CradleSpec
 
 internal object CradleConfigurator {
-    fun configureCradle(integration: CradleIntegration, spec: CradleSpec) {
+    fun configureCradle(
+        integration: CradleIntegration,
+        spec: CradleSpec,
+    ) {
         integration.recreateKeyspace(spec.settings.keyspace)
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +26,21 @@ import java.util.concurrent.TimeUnit
 
 public class CollectorMessageListener<T> private constructor(
     private val queue: BlockingQueue<T>,
-) : MessageListener<T>, Iterable<T> by queue {
-
+) : MessageListener<T>,
+    Iterable<T> by queue {
     public fun isEmpty(): Boolean = queue.isEmpty()
 
     public fun poll(duration: Duration): T? = queue.poll(duration.toMillis(), TimeUnit.MILLISECONDS)
 
-    override fun handle(deliveryMetadata: DeliveryMetadata, message: T) {
-        queue.put(message)
+    override fun handle(
+        deliveryMetadata: DeliveryMetadata,
+        message: T,
+    ) {
+        queue.put(
+            requireNotNull(message) {
+                "handled message can't null"
+            },
+        )
     }
 
     public companion object {
@@ -42,8 +49,7 @@ public class CollectorMessageListener<T> private constructor(
             CollectorMessageListener(ArrayBlockingQueue(capacity))
 
         @JvmStatic
-        public fun <T> createUnbound(): CollectorMessageListener<T> =
-            CollectorMessageListener(LinkedBlockingQueue())
+        public fun <T> createUnbound(): CollectorMessageListener<T> = CollectorMessageListener(LinkedBlockingQueue())
     }
 }
 

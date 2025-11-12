@@ -33,11 +33,18 @@ import java.lang.reflect.Field
 import java.nio.file.Path
 import kotlin.io.path.outputStream
 
-public class Th2RabbitMqExtension : TestInstancePostProcessor, BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
+public class Th2RabbitMqExtension :
+    TestInstancePostProcessor,
+    BeforeAllCallback,
+    BeforeEachCallback,
+    AfterAllCallback {
     private var spec = RabbitMqSpec.create()
     private lateinit var rabbitmq: RabbitMqIntegration
 
-    override fun postProcessTestInstance(testInstance: Any, context: ExtensionContext) {
+    override fun postProcessTestInstance(
+        testInstance: Any,
+        context: ExtensionContext,
+    ) {
         val fields: List<Field> = testInstance::class.findFields<RabbitMqSpec>().ifEmpty { return }
         spec = testInstance.getSingle(fields)
     }
@@ -74,11 +81,13 @@ public class Th2RabbitMqExtension : TestInstancePostProcessor, BeforeAllCallback
     }
 
     private fun startMq(testInstance: Any) {
-        rabbitmq = testInstance.getFieldOrDefault {
-            RabbitMqIntegration.defaultImage().withDefaultExchange()
-        }.also {
-            RabbitMqConfigurator.setupQueues(it, spec)
-        }
+        rabbitmq =
+            testInstance
+                .getFieldOrDefault {
+                    RabbitMqIntegration.defaultImage().withDefaultExchange()
+                }.also {
+                    RabbitMqConfigurator.setupQueues(it, spec)
+                }
         rabbitmq.start()
     }
 

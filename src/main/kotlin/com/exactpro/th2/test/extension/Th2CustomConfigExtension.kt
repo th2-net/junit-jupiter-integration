@@ -27,9 +27,15 @@ import org.junit.platform.commons.support.AnnotationSupport
 import org.junit.platform.commons.support.ReflectionSupport
 import kotlin.io.path.outputStream
 
-public class Th2CustomConfigExtension : TestInstancePostProcessor, BeforeTestExecutionCallback {
+public class Th2CustomConfigExtension :
+    TestInstancePostProcessor,
+    BeforeTestExecutionCallback {
     private var spec: CustomConfigSpec? = null
-    override fun postProcessTestInstance(testInstance: Any, context: ExtensionContext) {
+
+    override fun postProcessTestInstance(
+        testInstance: Any,
+        context: ExtensionContext,
+    ) {
         val fields = testInstance::class.findFields<CustomConfigSpec>().ifEmpty { return }
         spec = testInstance.getSingle(fields)
     }
@@ -37,17 +43,21 @@ public class Th2CustomConfigExtension : TestInstancePostProcessor, BeforeTestExe
     override fun beforeTestExecution(context: ExtensionContext) {
         val testClass = context.requiredTestClass
         val testMethod = context.requiredTestMethod
-        val customConfigSpec: CustomConfigSpec = AnnotationSupport.findAnnotation(testMethod, CustomConfigProvider::class.java)
-            .map {
-                val configProvider = ReflectionSupport.findMethod(
-                    testClass,
-                    it.name,
-                ).orElseGet { error("cannot find method ${it.name} in class $testClass") }
-                val config = ReflectionSupport.invokeMethod(configProvider, context.requiredTestInstance)
-                (config as? CustomConfigSpec) ?: error("method $configProvider does not return ${CustomConfigSpec::class}")
-            }.orElseGet {
-                spec
-            } ?: return
+        val customConfigSpec: CustomConfigSpec =
+            AnnotationSupport
+                .findAnnotation(testMethod, CustomConfigProvider::class.java)
+                .map {
+                    val configProvider =
+                        ReflectionSupport
+                            .findMethod(
+                                testClass,
+                                it.name,
+                            ).orElseGet { error("cannot find method ${it.name} in class $testClass") }
+                    val config = ReflectionSupport.invokeMethod(configProvider, context.requiredTestInstance)
+                    (config as? CustomConfigSpec) ?: error("method $configProvider does not return ${CustomConfigSpec::class}")
+                }.orElseGet {
+                    spec
+                } ?: return
         writeSpec(context, customConfigSpec)
     }
 

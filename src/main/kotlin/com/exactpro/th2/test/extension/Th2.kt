@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,7 @@ internal object Th2 {
     @JvmField
     val NAMESPACE: Namespace = Namespace.create(Th2::class)
 
-    fun getAppConfigFolder(context: ExtensionContext): Path =
-        context.getStore(NAMESPACE).getRequired(Th2ConfigExtension.APP_CONFIG)
+    fun getAppConfigFolder(context: ExtensionContext): Path = context.getStore(NAMESPACE).getRequired(Th2ConfigExtension.APP_CONFIG)
 
-    fun getTestConfigFolder(context: ExtensionContext): Path =
-        context.getStore(NAMESPACE).getRequired(Th2ConfigExtension.TEST_CONFIG)
+    fun getTestConfigFolder(context: ExtensionContext): Path = context.getStore(NAMESPACE).getRequired(Th2ConfigExtension.TEST_CONFIG)
 }

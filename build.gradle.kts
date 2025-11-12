@@ -79,7 +79,6 @@ kotlin {
 }
 
 ktlint {
-    version.set("0.50.0")
     reporters {
         reporter(ReporterType.HTML)
     }
