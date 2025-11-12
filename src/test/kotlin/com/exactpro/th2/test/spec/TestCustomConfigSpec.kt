@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Exactpro (Exactpro Systems Limited)
+ * Copyright 2024-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,13 +29,14 @@ import org.junit.jupiter.api.Test
 internal class TestCustomConfigSpec {
     private var testValue: Int = 0
 
-    val custom = CustomConfigSpec.fromSupplier {
-        """
-        {
-            "test": "$testValue"
+    val custom =
+        CustomConfigSpec.fromSupplier {
+            """
+            {
+                "test": "$testValue"
+            }
+            """.trimIndent()
         }
-        """.trimIndent()
-    }
 
     @BeforeEach
     fun setUp() {
@@ -59,8 +60,10 @@ internal class TestCustomConfigSpec {
         Assertions.assertEquals(54, setting.test, "unexpected value in property")
     }
 
-    fun config(): CustomConfigSpec =
-        CustomConfigSpec.fromObject(Setting(54))
+    @Suppress("unused")
+    fun config(): CustomConfigSpec = CustomConfigSpec.fromObject(Setting(54))
 
-    private data class Setting(val test: Int)
+    private data class Setting(
+        val test: Int,
+    )
 }

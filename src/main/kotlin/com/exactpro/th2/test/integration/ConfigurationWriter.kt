@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,10 @@ internal object ConfigurationWriter {
     const val GRPC_CONFIG: String = "grpc.json"
     const val GRPC_ROUTER_CONFIG: String = "grpc_router.json"
 
-    fun write(cfg: Any, output: OutputStream) {
+    fun write(
+        cfg: Any,
+        output: OutputStream,
+    ) {
         MAPPER.writeValue(output, cfg)
     }
 }

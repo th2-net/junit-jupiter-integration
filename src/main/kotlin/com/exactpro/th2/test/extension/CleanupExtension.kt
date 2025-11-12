@@ -94,7 +94,7 @@ public class CleanupExtension :
         val autoClosableRegistry = (
             store.get(AFTER_TEST_KEY, ClosableRegistry::class.java)
                 ?: store.get(AFTER_ALL_KEY, ClosableRegistry::class.java)
-            )
+        )
         return autoClosableRegistry?.registry ?: error("registry is not created")
     }
 

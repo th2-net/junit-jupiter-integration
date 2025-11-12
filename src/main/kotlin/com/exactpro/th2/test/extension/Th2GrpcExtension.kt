@@ -82,25 +82,25 @@ public class Th2GrpcExtension :
     ) = GrpcConfiguration(
         serverConfiguration = GrpcServerConfiguration(port = appPort),
         services =
-        grpcSpec.clients.associate {
-            "${it.type.simpleName}-${RandomStringUtils.insecure().nextAlphabetic(5)}" to
-                GrpcServiceConfiguration(
-                    strategy =
-                    RobinRoutingStrategy().apply {
-                        init(GrpcRawRobinStrategy(endpoints = listOf("test-endpoint")))
-                    },
-                    serviceClass = it.type,
-                    endpoints =
-                    mapOf(
-                        "test-endpoint" to
-                            GrpcEndpointConfiguration(
-                                host = "localhost",
-                                port = testPort,
-                                attributes = it.attributes.toList(),
+            grpcSpec.clients.associate {
+                "${it.type.simpleName}-${RandomStringUtils.insecure().nextAlphabetic(5)}" to
+                    GrpcServiceConfiguration(
+                        strategy =
+                            RobinRoutingStrategy().apply {
+                                init(GrpcRawRobinStrategy(endpoints = listOf("test-endpoint")))
+                            },
+                        serviceClass = it.type,
+                        endpoints =
+                            mapOf(
+                                "test-endpoint" to
+                                    GrpcEndpointConfiguration(
+                                        host = "localhost",
+                                        port = testPort,
+                                        attributes = it.attributes.toList(),
+                                    ),
                             ),
-                    ),
-                )
-        },
+                    )
+            },
     )
 
     private fun createTestGrpcConfig(
@@ -110,24 +110,24 @@ public class Th2GrpcExtension :
     ) = GrpcConfiguration(
         serverConfiguration = GrpcServerConfiguration(port = testPort),
         services =
-        grpcSpec.servers.associate {
-            "${it.simpleName}-${RandomStringUtils.insecure().nextAlphabetic(5)}" to
-                GrpcServiceConfiguration(
-                    strategy =
-                    RobinRoutingStrategy().apply {
-                        init(GrpcRawRobinStrategy(endpoints = listOf("test-endpoint")))
-                    },
-                    serviceClass = it,
-                    endpoints =
-                    mapOf(
-                        "test-endpoint" to
-                            GrpcEndpointConfiguration(
-                                host = "localhost",
-                                port = appPort,
+            grpcSpec.servers.associate {
+                "${it.simpleName}-${RandomStringUtils.insecure().nextAlphabetic(5)}" to
+                    GrpcServiceConfiguration(
+                        strategy =
+                            RobinRoutingStrategy().apply {
+                                init(GrpcRawRobinStrategy(endpoints = listOf("test-endpoint")))
+                            },
+                        serviceClass = it,
+                        endpoints =
+                            mapOf(
+                                "test-endpoint" to
+                                    GrpcEndpointConfiguration(
+                                        host = "localhost",
+                                        port = appPort,
+                                    ),
                             ),
-                    ),
-                )
-        },
+                    )
+            },
     )
 
     private fun findFreePort(

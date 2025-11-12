@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,23 +36,28 @@ internal class TestGrpcSpec {
     @Th2IntegrationTest
     inner class Service {
         @JvmField
-        internal val grpc = GrpcSpec.create()
-            .client<Check1Service>()
+        @Suppress("unused")
+        internal val grpc =
+            GrpcSpec
+                .create()
+                .client<Check1Service>()
 
         @Test
         fun `registers grpc service`(
             @Th2AppFactory factory: CommonFactory,
             @Th2TestFactory testFactory: CommonFactory,
         ) {
-            testFactory.grpcRouter.startServer(
-                TestCheck1Service(),
-            ).start()
+            testFactory.grpcRouter
+                .startServer(
+                    TestCheck1Service(),
+                ).start()
 
             val check1Service = factory.grpcRouter.getService(Check1Service::class.java)
 
-            val response = check1Service.createCheckpoint(
-                CheckpointRequest.getDefaultInstance(),
-            )
+            val response =
+                check1Service.createCheckpoint(
+                    CheckpointRequest.getDefaultInstance(),
+                )
             val sessionAliasToDirectionCheckpoint =
                 response.checkpoint.bookNameToSessionAliasToDirectionCheckpointMap["test_book"]
             Assertions.assertNotNull(sessionAliasToDirectionCheckpoint, "cannot find book test_book")
@@ -73,23 +78,28 @@ internal class TestGrpcSpec {
     @Th2IntegrationTest
     inner class Server {
         @JvmField
-        internal val grpc = GrpcSpec.create()
-            .server<Check1Service>()
+        @Suppress("unused")
+        internal val grpc =
+            GrpcSpec
+                .create()
+                .server<Check1Service>()
 
         @Test
         fun `registers grpc server`(
             @Th2AppFactory factory: CommonFactory,
             @Th2TestFactory testFactory: CommonFactory,
         ) {
-            factory.grpcRouter.startServer(
-                TestCheck1Service(),
-            ).start()
+            factory.grpcRouter
+                .startServer(
+                    TestCheck1Service(),
+                ).start()
 
             val check1Service = testFactory.grpcRouter.getService(Check1Service::class.java)
 
-            val response = check1Service.createCheckpoint(
-                CheckpointRequest.getDefaultInstance(),
-            )
+            val response =
+                check1Service.createCheckpoint(
+                    CheckpointRequest.getDefaultInstance(),
+                )
             val sessionAliasToDirectionCheckpoint =
                 response.checkpoint.bookNameToSessionAliasToDirectionCheckpointMap["test_book"]
             Assertions.assertNotNull(sessionAliasToDirectionCheckpoint, "cannot find book test_book")
@@ -112,25 +122,27 @@ private class TestCheck1Service : Check1Grpc.Check1ImplBase() {
         request: CheckpointRequest,
         responseObserver: StreamObserver<CheckpointResponse>,
     ) {
-        val checkpoint = Checkpoint.newBuilder()
-            .putBookNameToSessionAliasToDirectionCheckpoint(
-                "test_book",
-                Checkpoint.SessionAliasToDirectionCheckpoint.newBuilder()
-                    .putSessionAliasToDirectionCheckpoint(
-                        "test_alias",
-                        Checkpoint.DirectionCheckpoint.newBuilder()
-                            .putDirectionToCheckpointData(
-                                1,
-                                Checkpoint.CheckpointData.newBuilder()
-                                    .setSequence(42)
-                                    .setTimestamp(Timestamps.now())
-                                    .build(),
-                            )
-                            .build(),
-                    )
-                    .build(),
-            )
-            .build()
+        val checkpoint =
+            Checkpoint
+                .newBuilder()
+                .putBookNameToSessionAliasToDirectionCheckpoint(
+                    "test_book",
+                    Checkpoint.SessionAliasToDirectionCheckpoint
+                        .newBuilder()
+                        .putSessionAliasToDirectionCheckpoint(
+                            "test_alias",
+                            Checkpoint.DirectionCheckpoint
+                                .newBuilder()
+                                .putDirectionToCheckpointData(
+                                    1,
+                                    Checkpoint.CheckpointData
+                                        .newBuilder()
+                                        .setSequence(42)
+                                        .setTimestamp(Timestamps.now())
+                                        .build(),
+                                ).build(),
+                        ).build(),
+                ).build()
         with(responseObserver) {
             onNext(CheckpointResponse.newBuilder().setCheckpoint(checkpoint).build())
             onCompleted()

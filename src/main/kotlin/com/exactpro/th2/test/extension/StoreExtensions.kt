@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,7 @@ package com.exactpro.th2.test.extension
 
 import org.junit.jupiter.api.extension.ExtensionContext.Store
 
-internal inline fun <reified T> Store.getRequired(key: Any): T {
-    return checkNotNull(get(key, T::class.java)) {
+internal inline fun <reified T> Store.getRequired(key: Any): T =
+    checkNotNull(get(key, T::class.java)) {
         "no value of type ${T::class} by key $key"
     }
-}

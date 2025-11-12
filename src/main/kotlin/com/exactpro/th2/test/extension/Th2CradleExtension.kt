@@ -53,7 +53,10 @@ public class Th2CradleExtension :
     private var cradleSpec: CradleSpec? = null
     private lateinit var cradle: CradleIntegration
 
-    override fun postProcessTestInstance(testInstance: Any, context: ExtensionContext) {
+    override fun postProcessTestInstance(
+        testInstance: Any,
+        context: ExtensionContext,
+    ) {
         val fields = testInstance::class.findFields<CradleSpec>().ifEmpty { return }
         cradleSpec = testInstance.getSingle(fields)
     }
@@ -108,17 +111,24 @@ public class Th2CradleExtension :
         }
     }
 
-    override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean {
-        return parameterContext.parameter.type == CradleManager::class.java
-    }
+    override fun supportsParameter(
+        parameterContext: ParameterContext,
+        extensionContext: ExtensionContext,
+    ): Boolean = parameterContext.parameter.type == CradleManager::class.java
 
-    override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
+    override fun resolveParameter(
+        parameterContext: ParameterContext,
+        extensionContext: ExtensionContext,
+    ): Any {
         val spec = checkNotNull(cradleSpec) { "cannot create Cradle manager without spec specified" }
-        val resource = extensionContext.getStore(Th2.NAMESPACE).getOrComputeIfAbsent(
-            Th2CradleExtension::class,
-        ) {
-            ClosableCradleResource(createManager(spec))
-        }.let(ClosableCradleResource::class::cast)
+        val resource =
+            extensionContext
+                .getStore(Th2.NAMESPACE)
+                .getOrComputeIfAbsent(
+                    Th2CradleExtension::class,
+                ) {
+                    ClosableCradleResource(createManager(spec))
+                }.let(ClosableCradleResource::class::cast)
         return resource.manager
     }
 
@@ -136,7 +146,10 @@ public class Th2CradleExtension :
         }
     }
 
-    private fun startCradle(spec: CradleSpec, testInstance: Any) {
+    private fun startCradle(
+        spec: CradleSpec,
+        testInstance: Any,
+    ) {
         cradle = testInstance.getFieldOrDefault { CradleIntegration.defaultImage() }
         cradle.start()
         if (spec.reuseKeyspace) {
@@ -152,9 +165,7 @@ public class Th2CradleExtension :
         }
     }
 
-    private fun createManager(
-        spec: CradleSpec,
-    ): CassandraCradleManager {
+    private fun createManager(spec: CradleSpec): CassandraCradleManager {
         val contactPoint = cradle.container.contactPoint
         return CassandraCradleManager(
             CassandraConnectionSettings(
@@ -181,14 +192,19 @@ public class Th2CradleExtension :
     }
 }
 
-private fun CradleStorage.createPages(bookName: String, spec: CradleSpec, minDistanceBetweenPages: Long) {
+private fun CradleStorage.createPages(
+    bookName: String,
+    spec: CradleSpec,
+    minDistanceBetweenPages: Long,
+) {
     val bookStart = Instant.now()
-    val bookInfo: BookInfo = addBook(
-        BookToAdd(
-            bookName,
-            bookStart,
-        ),
-    )
+    val bookInfo: BookInfo =
+        addBook(
+            BookToAdd(
+                bookName,
+                bookStart,
+            ),
+        )
     var pageStart: Instant = bookStart
     val pageEnd: Instant = pageStart + spec.autoPageInterval
     var index = 1

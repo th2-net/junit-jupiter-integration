@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,25 +27,26 @@ private annotation class RabbitMqSpecDsl
 
 @RabbitMqSpecDsl
 public class RabbitMqSpec private constructor() {
-
     internal val pinsSpec: PinsSpec = PinsSpec()
 
-    public fun configurePins(block: Consumer<PinsSpec>): RabbitMqSpec = apply {
-        block.accept(pinsSpec)
-    }
+    public fun configurePins(block: Consumer<PinsSpec>): RabbitMqSpec =
+        apply {
+            block.accept(pinsSpec)
+        }
 
     public companion object {
         public const val EVENTS_PIN_NAME: String = "events"
 
         @JvmStatic
-        public fun create(): RabbitMqSpec = RabbitMqSpec()
-            .pins {
-                publishers {
-                    pin(EVENTS_PIN_NAME) {
-                        attributes("event")
+        public fun create(): RabbitMqSpec =
+            RabbitMqSpec()
+                .pins {
+                    publishers {
+                        pin(EVENTS_PIN_NAME) {
+                            attributes("event")
+                        }
                     }
                 }
-            }
     }
 }
 
@@ -79,31 +80,40 @@ public class PinCollectionSpec internal constructor(
 ) {
     internal val pins: MutableMap<String, PinSpec> = hashMapOf()
 
-    public fun configurePin(name: String, block: Consumer<PinSpec>): PinCollectionSpec = apply {
-        val pinSpec = PinSpec().also(block::accept).apply {
-            attributeSet.addAll(this@PinCollectionSpec.defaultAttributes)
+    public fun configurePin(
+        name: String,
+        block: Consumer<PinSpec>,
+    ): PinCollectionSpec =
+        apply {
+            val pinSpec =
+                PinSpec().also(block::accept).apply {
+                    attributeSet.addAll(this@PinCollectionSpec.defaultAttributes)
+                }
+            check(pins.put(name, pinSpec) == null) {
+                "duplicated pin $name"
+            }
         }
-        check(pins.put(name, pinSpec) == null) {
-            "duplicated pin $name"
-        }
-    }
 }
 
-public fun PinCollectionSpec.pin(name: String, block: PinSpec.() -> Unit): PinCollectionSpec =
-    configurePin(name, Consumer(block))
+public fun PinCollectionSpec.pin(
+    name: String,
+    block: PinSpec.() -> Unit,
+): PinCollectionSpec = configurePin(name, Consumer(block))
 
 @RabbitMqSpecDsl
 public class PinSpec internal constructor() {
     internal val attributeSet: MutableSet<String> = hashSetOf()
     internal val filters: MutableList<FilterContainerSpec> = arrayListOf()
 
-    public fun attributes(vararg attributes: String): PinSpec = apply {
-        attributeSet.addAll(attributes)
-    }
+    public fun attributes(vararg attributes: String): PinSpec =
+        apply {
+            attributeSet.addAll(attributes)
+        }
 
-    public fun addFilter(block: Consumer<FilterContainerSpec>): PinSpec = apply {
-        filters.add(FilterContainerSpec().also(block::accept))
-    }
+    public fun addFilter(block: Consumer<FilterContainerSpec>): PinSpec =
+        apply {
+            filters.add(FilterContainerSpec().also(block::accept))
+        }
 }
 
 public fun PinSpec.filter(block: FilterContainerSpec.() -> Unit): PinSpec = addFilter(Consumer(block))
@@ -123,6 +133,7 @@ public class FilterContainerSpec internal constructor() {
 }
 
 public fun FilterContainerSpec.metadata(block: FilterSpec.() -> Unit): Unit = configureMetadataFilter(Consumer(block))
+
 public fun FilterContainerSpec.message(block: FilterSpec.() -> Unit): Unit = configureMessageFilter(Consumer(block))
 
 @RabbitMqSpecDsl
@@ -148,28 +159,26 @@ public class FilterSpec internal constructor() {
         private val filters: MutableList<FieldFilterConfiguration>,
         private val root: FilterSpec,
     ) {
+        public fun shouldBeEmpty(): FilterSpec = addFilter(FieldFilterOperation.EMPTY)
 
-        public fun shouldBeEmpty(): FilterSpec =
-            addFilter(FieldFilterOperation.EMPTY)
+        public fun shouldNotBeEmpty(): FilterSpec = addFilter(FieldFilterOperation.NOT_EMPTY)
 
-        public fun shouldNotBeEmpty(): FilterSpec =
-            addFilter(FieldFilterOperation.NOT_EMPTY)
+        public infix fun shouldBeEqualTo(expectedValue: String): FilterSpec = addFilter(FieldFilterOperation.EQUAL, expectedValue)
 
-        public infix fun shouldBeEqualTo(expectedValue: String): FilterSpec =
-            addFilter(FieldFilterOperation.EQUAL, expectedValue)
+        public infix fun shouldNotBeEqualTo(expectedValue: String): FilterSpec = addFilter(FieldFilterOperation.NOT_EQUAL, expectedValue)
 
-        public infix fun shouldNotBeEqualTo(expectedValue: String): FilterSpec =
-            addFilter(FieldFilterOperation.NOT_EQUAL, expectedValue)
+        public infix fun shouldMatchWildcard(wildcard: String): FilterSpec = addFilter(FieldFilterOperation.WILDCARD, wildcard)
 
-        public infix fun shouldMatchWildcard(wildcard: String): FilterSpec =
-            addFilter(FieldFilterOperation.WILDCARD, wildcard)
-
-        private fun addFilter(operation: FieldFilterOperation, expectedValue: String? = null): FilterSpec {
-            filters += FieldFilterConfiguration(
-                fieldName = fieldName,
-                expectedValue = expectedValue,
-                operation = operation,
-            )
+        private fun addFilter(
+            operation: FieldFilterOperation,
+            expectedValue: String? = null,
+        ): FilterSpec {
+            filters +=
+                FieldFilterConfiguration(
+                    fieldName = fieldName,
+                    expectedValue = expectedValue,
+                    operation = operation,
+                )
             return root
         }
     }

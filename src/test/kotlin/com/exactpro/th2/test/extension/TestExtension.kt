@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,30 +41,37 @@ import java.time.Duration
 internal class TestExtension {
     @Suppress("unused")
     @JvmField
-    internal val spec: RabbitMqSpec = RabbitMqSpec.create()
-        .pins {
-            subscribers {
-                pin("test") {
-                    attributes("transport-group")
+    internal val spec: RabbitMqSpec =
+        RabbitMqSpec
+            .create()
+            .pins {
+                subscribers {
+                    pin("test") {
+                        attributes("transport-group")
+                    }
                 }
             }
-        }
 
     @JvmField
-    internal val cradle: CradleSpec = CradleSpec.create("test")
-        .reuseKeyspace()
-        .withPageDuration(Duration.ofMinutes(1))
-        .withAutoPageInterval(Duration.ofMinutes(15))
-        .withRefreshBookInterval(100)
+    @Suppress("unused")
+    internal val cradle: CradleSpec =
+        CradleSpec
+            .create("test")
+            .reuseKeyspace()
+            .withPageDuration(Duration.ofMinutes(1))
+            .withAutoPageInterval(Duration.ofMinutes(15))
+            .withRefreshBookInterval(100)
 
     @JvmField
-    internal val customConfigSpec: CustomConfigSpec = CustomConfigSpec.fromString(
-        """
-        {
-            "test": 42
-        }
-        """.trimIndent(),
-    )
+    @Suppress("unused")
+    internal val customConfigSpec: CustomConfigSpec =
+        CustomConfigSpec.fromString(
+            """
+            {
+                "test": 42
+            }
+            """.trimIndent(),
+        )
 
     @Test
     fun testFactoryCanSendMessagesToApp(
@@ -78,24 +85,25 @@ internal class TestExtension {
             monitor.unsubscribe()
         }
 
-        val groupBatch = GroupBatch.builder()
-            .setBook("book")
-            .setSessionGroup("group")
-            .addGroup(
-                MessageGroup.builder()
-                    .addMessage(
-                        ParsedMessage.builder()
-                            .setId(MessageId.DEFAULT)
-                            .setType("test")
-                            .apply {
-                                bodyBuilder()
-                                    .put("test", "A")
-                            }
-                            .build(),
-                    )
-                    .build(),
-            )
-            .build()
+        val groupBatch =
+            GroupBatch
+                .builder()
+                .setBook("book")
+                .setSessionGroup("group")
+                .addGroup(
+                    MessageGroup
+                        .builder()
+                        .addMessage(
+                            ParsedMessage
+                                .builder()
+                                .setId(MessageId.DEFAULT)
+                                .setType("test")
+                                .apply {
+                                    bodyBuilder()
+                                        .put("test", "A")
+                                }.build(),
+                        ).build(),
+                ).build()
         testFactory.transportGroupBatchRouter.send(groupBatch)
 
         val batch = listener.poll(Duration.ofSeconds(5))

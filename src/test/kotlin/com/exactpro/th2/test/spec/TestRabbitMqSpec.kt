@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Exactpro (Exactpro Systems Limited)
+ * Copyright 2023-2025 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,20 +38,23 @@ import java.time.Instant
 @Th2IntegrationTest
 internal class TestRabbitMqSpec {
     @JvmField
-    internal val spec = RabbitMqSpec.create()
-        .pins {
-            publishers {
-                pin("pin_name") {
-                    attributes("a", "b", "transport-group")
-                    filter {
-                        message {
-                            sessionAlias() shouldMatchWildcard "test_*"
-                            messageType() shouldBeEqualTo "test"
+    @Suppress("unused")
+    internal val spec =
+        RabbitMqSpec
+            .create()
+            .pins {
+                publishers {
+                    pin("pin_name") {
+                        attributes("a", "b", "transport-group")
+                        filter {
+                            message {
+                                sessionAlias() shouldMatchWildcard "test_*"
+                                messageType() shouldBeEqualTo "test"
+                            }
                         }
                     }
                 }
             }
-        }
 
     @Test
     fun connectsEventPinBetweenAppAndTestFactories(
@@ -81,30 +84,33 @@ internal class TestRabbitMqSpec {
         @Th2TestFactory testFactory: CommonFactory,
     ) {
         val appRouter = appFactory.transportGroupBatchRouter
-        val messageId: MessageId = MessageId.builder()
-            .setSessionAlias("test_1")
-            .setSequence(1)
-            .setTimestamp(Instant.now())
-            .setDirection(Direction.OUTGOING)
-            .build()
+        val messageId: MessageId =
+            MessageId
+                .builder()
+                .setSessionAlias("test_1")
+                .setSequence(1)
+                .setTimestamp(Instant.now())
+                .setDirection(Direction.OUTGOING)
+                .build()
         appRouter.send(
-            GroupBatch.builder()
+            GroupBatch
+                .builder()
                 .setBook(BoxConfiguration.DEFAULT_BOOK_NAME)
                 .setSessionGroup("session_group")
                 .setGroups(
                     listOf(
-                        MessageGroup.builder()
+                        MessageGroup
+                            .builder()
                             .addMessage(
-                                ParsedMessage.builder()
+                                ParsedMessage
+                                    .builder()
                                     .setType("test")
                                     .setId(messageId)
                                     .setBody(mapOf("test" to 42))
                                     .build(),
-                            )
-                            .build(),
+                            ).build(),
                     ),
-                )
-                .build(),
+                ).build(),
             "a",
         )
         val listener = createUnbound<GroupBatch>()
