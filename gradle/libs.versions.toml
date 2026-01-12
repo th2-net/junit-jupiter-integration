@@ -19,7 +19,7 @@ junit-bom = { group = "org.junit", name = "junit-bom", version = "5.14.2" }
 testcontainers-bom = { group = "org.testcontainers", name = "testcontainers-bom", version = "2.0.3" }
 
 [plugins]
-th2-publish = { id = "com.exactpro.th2.gradle.publish", version = "0.3.11" }
+th2-publish = { id = "com.exactpro.th2.gradle.publish", version = "0.3.14" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "14.0.1" }
 compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.18.1" }
