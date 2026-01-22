@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.2.10"
 cradle = "5.7.1-dev"
-logback = "1.5.24"
+logback = "1.5.25"
 
 [libraries]
 th2-bom = { group = "com.exactpro.th2", name = "bom", version = "4.14.3" }
