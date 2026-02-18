@@ -8,7 +8,7 @@ th2-bom = { group = "com.exactpro.th2", name = "bom", version = "4.14.3" }
 th2-common = { group = "com.exactpro.th2", name = "common", version = "5.17.2-dev" }
 th2-cradle-cassandra = { group = "com.exactpro.th2", name = "cradle-cassandra", version.ref = "cradle" }
 th2-grpc-service-generator = { group = "com.exactpro.th2", name = "grpc-service-generator", version = "3.8.5" }
-th2-grpc-check1 = { group = "com.exactpro.th2", name = "grpc-check1", version = "4.5.1" }
+th2-grpc-check1 = { group = "com.exactpro.th2", name = "grpc-check1", version = "4.5.2" }
 
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging", version = "7.0.14" }
 commons-compress = { group = "org.apache.commons", name = "commons-compress", version = "1.28.0" }
